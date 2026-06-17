@@ -1,6 +1,6 @@
 # 📈 Kalkulator Ar Rahnu V2 (Desktop Edition)
 
-**Kalkulator Ar Rahnu V2 Desktop Edition** ialah perisian desktop Windows mudah alih (portable) yang direka khas untuk memudahkan kakitangan cawangan mengurus simulasi pembiayaan Ar Rahnu, pengiraan belian balik (trade-in), dan simpanan selamat Al Saleem secara **100% offline** (tanpa memerlukan sambungan internet).
+**Kalkulator Ar Rahnu V2 Desktop Edition** ialah perisian desktop Windows mudah alih (portable) yang direka khas untuk memudahkan kakitangan cawangan mengurus simulasi pembiayaan Ar Rahnu, pengiraan belian balik, dan simpanan selamat Al Saleem secara **100% offline** (tanpa memerlukan sambungan internet).
 
 Perisian ini selamat daripada sekatan tembok api (*firewall*) pejabat kerana semua pangkalan data (SQLite), jenis tulisan (font), dan grafik dijalankan sepenuhnya secara tempatan di dalam komputer anda.
 
@@ -14,7 +14,7 @@ Anda **TIDAK PERLU** memasang sebarang perisian sokongan atau melakukan persedia
 *   **🌐 Pautan Alternatif GitHub:** [GitHub Releases](https://github.com/zuwanaufa/Kalkulator-Ar-Rahnu-V2-EXE)
 
 > [!TIP]
-> Muat turun fail bernama **`ArRahnuCalcV2 Portable.exe`** (atau versi terkini), pindahkan ke komputer pejabat anda (cth: melalui USB drive atau e-mel), dan **dwi-klik (double-click)** untuk terus menggunakannya.
+> Muat turun fail bernama **`KalkulatorArRahnuV2.exe`** (atau versi terkini), pindahkan ke komputer pejabat anda (cth: melalui USB drive atau e-mel), dan **dwi-klik (double-click)** untuk terus menggunakannya.
 
 ---
 
@@ -55,7 +55,7 @@ Anda **TIDAK PERLU** memasang sebarang perisian sokongan atau melakukan persedia
 ## 🛠️ Panduan Ringkas Penggunaan (User Guide)
 
 ### Cara Memulakan Aplikasi:
-1.  Dwi-klik fail `ArRahnuCalcV2 Portable.exe`.
+1.  Dwi-klik fail `KalkulatorArRahnuV2.exe`.
 2.  Jika Windows SmartScreen memaparkan amaran keselamatan (*"Windows protected your PC"*), klik pada **"More Info"** kemudian klik butang **"Run anyway"**. Ini adalah perkara biasa untuk aplikasi desktop mudah alih yang tidak didaftarkan secara komersial.
 
 ### Mengemas Kini Harga Emas Kaunter:

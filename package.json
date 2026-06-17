@@ -27,10 +27,13 @@
   },
   "build": {
     "appId": "com.yapeim.arrahnuv2",
-    "productName": "ArRahnuCalcV2",
+    "productName": "KalkulatorArRahnuV2",
     "win": {
       "target": "portable",
       "requestedExecutionLevel": "asInvoker"
+    },
+    "portable": {
+      "artifactName": "KalkulatorArRahnuV2.${ext}"
     },
     "files": [
       "src/**/*",
