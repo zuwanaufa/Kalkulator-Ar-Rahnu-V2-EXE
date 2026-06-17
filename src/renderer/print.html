@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none';">
+    <title>Slip Simulasi Pengiraan Ar Rahnu</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 30px;
+            max-width: 850px;
+            margin: 0 auto;
+            font-size: 11px;
+            color: #1a202c;
+            line-height: 1.4;
+            background-color: #fff;
+        }
+
+        h2,
+        h3 {
+            color: #aa8c2c;
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px double #aa8c2c;
+            padding-bottom: 12px;
+        }
+
+        .warning-banner {
+            background-color: #fffaf0;
+            border-left: 4px solid #dd6b20;
+            padding: 10px 15px;
+            border-radius: 6px;
+            color: #dd6b20;
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-card {
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fff;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #aa8c2c;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 5px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .section-table th,
+        .section-table td {
+            padding: 5px 4px;
+            border-bottom: 1px dotted #e2e8f0;
+            text-align: left;
+        }
+
+        .section-table th {
+            font-weight: bold;
+            border-bottom: 2px solid #cbd5e0;
+            background: #f7fafc;
+        }
+
+        .text-right {
+            text-align: right !important;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        .text-red {
+            color: #e53e3e;
+            font-weight: 500;
+        }
+
+        .text-green {
+            color: #38a169;
+            font-weight: bold;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #fffdf5;
+            border-top: 2px solid #cbd5e0;
+        }
+
+        .net-row-total {
+            font-size: 12px;
+            font-weight: bold;
+            border-top: 2px solid #1a202c;
+            background-color: #fffdf5;
+        }
+
+        .schedule-card {
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10.5px;
+        }
+
+        .schedule-table td {
+            padding: 5px 6px;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .schedule-table tr.group-header td {
+            font-weight: bold;
+            background-color: #edf2f7;
+            padding: 6px;
+            color: #2d3748;
+        }
+
+        .schedule-table tr.total-row-highlight td {
+            font-weight: bold;
+            color: #dd6b20;
+            background-color: #fffdf5;
+            border-top: 1.5px solid #cbd5e0;
+            border-bottom: 1.5px solid #cbd5e0;
+        }
+
+        .notes {
+            font-size: 9px;
+            margin-top: 20px;
+            text-align: center;
+            font-style: italic;
+            color: #718096;
+            line-height: 1.4;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+        }
+
+        /* --- Preview Toolbar Styling (Only Screen) --- */
+        .preview-toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #12161f;
+            border-bottom: 1px solid #2e374b;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .toolbar-title {
+            color: #f3f4f6;
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .toolbar-actions button {
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background-color: #d4af37;
+            color: #0c0e12;
+        }
+
+        .btn-primary:hover {
+            background-color: #e8c547;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #232938;
+            color: #f3f4f6;
+            border: 1px solid #2e374b !important;
+        }
+
+        .btn-secondary:hover {
+            background-color: #2e374b;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background-color: #f87171;
+            transform: translateY(-1px);
+        }
+
+        /* Hide Toolbar on Print */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                padding: 0 !important;
+                margin: 0 !important;
+                background-color: #ffffff !important;
+            }
+
+            .print-container {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background-color: #ffffff !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 1.5cm 1.2cm;
+                /* Professional print margins */
+            }
+        }
+
+        /* Screen Presentation */
+        @media screen {
+            body {
+                background-color: #0c0e12 !important;
+                /* Matches main application theme */
+                padding: 85px 20px 40px 20px !important;
+                /* Account for fixed toolbar */
+                margin: 0 auto;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+            }
+
+            .print-container {
+                background-color: #ffffff !important;
+                color: #1a202c !important;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+                border-radius: 12px;
+                padding: 40px 50px !important;
+                border: 1px solid #2e374b;
+                width: 100%;
+                max-width: 800px;
+                min-height: 297mm;
+                /* Standard A4 proportion on screen */
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Preview Toolbar (Only visible on screen) -->
+    <div class="no-print preview-toolbar">
+        <div class="toolbar-title">Previu Cetak Slip Simulasi</div>
+        <div class="toolbar-actions">
+            <button class="btn-primary" id="btnPrint">🖨️ Cetak</button>
+            <button class="btn-secondary" id="btnPdf">📄 Simpan PDF</button>
+            <button class="btn-danger" id="btnClose">✕ Tutup</button>
+        </div>
+    </div>
+
+    <!-- Main Printable Content Container -->
+    <div class="print-container">
+        <div class="header">
+            <h2>SLIP SIMULASI PENGIRAAN AR RAHNU</h2>
+            <p style="font-size: 13px; font-weight: bold; color: #2d3748; margin-top: 5px;" id="productLabel">PRODUK: --
+            </p>
+            <p style="font-size: 10px; color: #718096; margin-top: 3px;" id="dateLabel">Tarikh: --/--/----</p>
+        </div>
+
+        <div class="warning-banner">
+            ⚠️ DOKUMEN INI ADALAH SIMULASI PENGIRAAN SAHAJA BAGI TUJUAN PENERANGAN DAN RUJUKAN PELANGGAN. IA BUKAN RESIT
+            RASMI TRANSAKSI DAN TIDAK BOLEH DIGUNAKAN SEBAGAI BUKTI SAH.
+        </div>
+
+        <!-- Dual Column Grid -->
+        <div class="grid-container">
+            <!-- Left Column: Items details -->
+            <div class="section-card">
+                <div class="section-title">📋 Butiran Barang Gadaian</div>
+                <table class="section-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 25px;">BIL</th>
+                            <th>Mutu</th>
+                            <th class="text-center">Harga/g</th>
+                            <th class="text-center">Berat (g)</th>
+                            <th class="text-right">Marhun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="3" class="text-right">Jumlah:</td>
+                            <td class="text-center" id="totalWeightVal">0.00 g</td>
+                            <td class="text-right" id="totalMarhunVal">RM 0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Right Column: Financial breakdown -->
+            <div class="section-card">
+                <div class="section-title">💰 Perincian Kewangan</div>
+                <table class="section-table">
+                    <tbody id="financialTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Repayment Schedule -->
+        <div class="schedule-card">
+            <div class="section-title">📅 Jadual Bayaran Balik & Simulasi Tempoh</div>
+            <table class="schedule-table">
+                <tbody id="scheduleTableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Promotional / Footer Notes -->
+        <div class="notes">
+            <p>* Dapatkan sebut harga percuma bagi pembaharuan <strong>Takaful Kenderaan</strong> di mana-mana cawangan
+                Ar Rahnu YAPEIM yang berhampiran.</p>
+            <p>* Melalui kerjasama bersama Etiqa, kami turut menawarkan pelan perlindungan kemalangan diri <strong>Flexi
+                    PA</strong> serta <strong>Driver & Passenger Personal Accident</strong>.</p>
+            <p>* Nilai pembiayaan sebenar mungkin berbeza berdasarkan penilaian akhir di kaunter.</p>
+            <p>Sila semak jumlah wang tunai dan baki sebelum meninggalkan kaunter. Resit rasmi akan dikeluarkan oleh
+                sistem komputer kaunter setelah transaksi sah diselesaikan.</p>
+            <p>Sila buat bayaran online secara mudah di: <strong>arrahnupay.yapeim.my</strong></p>
+        </div>
+    </div> <!-- Close .print-container -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const data = await window.api.getPrintData();
+                if (!data) return;
+
+                // Format Currency helper
+                const formatCur = (num) => 'RM ' + num.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const formatDate = (dateObj) => {
+                    const date = new Date(dateObj);
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                };
+
+                if (data.isAlSaleem) {
+                    // Inject compact styles for professional printing layout
+                    const style = document.createElement('style');
+                    style.innerHTML = `
+                        body {
+                            padding: 20px 25px !important;
+                            font-size: 10px !important;
+                        }
+                        .header {
+                            margin-bottom: 12px !important;
+                            padding-bottom: 6px !important;
+                        }
+                        .header h2 {
+                            font-size: 16px !important;
+                        }
+                        .warning-banner {
+                            padding: 6px 10px !important;
+                            font-size: 9.5px !important;
+                            margin-bottom: 12px !important;
+                        }
+                        .section-card {
+                            padding: 12px !important;
+                        }
+                        .section-table th {
+                            padding: 5px 6px !important;
+                            font-size: 9.5px !important;
+                            background: #f8fafc !important;
+                        }
+                        .section-table td {
+                            padding: 5px 6px !important;
+                            font-size: 9.5px !important;
+                        }
+                        .notes {
+                            margin-top: 15px !important;
+                            padding-top: 10px !important;
+                            font-size: 8.5px !important;
+                        }
+                    `;
+                    document.head.appendChild(style);
+
+                    // Populate Header
+                    document.querySelector('.header h2').textContent = 'SLIP SIMULASI SIMPANAN AL SALEEM';
+                    document.getElementById('productLabel').textContent = 'JENIS TRANSAKSI: AL SALEEM (SIMPANAN SELAMAT)';
+                    document.getElementById('dateLabel').textContent = `Tarikh: ${formatDate(data.pawnDate)}`;
+
+                    // Full width layout
+                    const gridContainer = document.querySelector('.grid-container');
+                    if (gridContainer) gridContainer.style.display = 'block';
+
+                    const cards = document.querySelectorAll('.grid-container .section-card');
+                    if (cards.length > 1) cards[1].style.display = 'none';
+
+                    if (cards[0]) {
+                        cards[0].style.width = '100%';
+                        const titleEl = cards[0].querySelector('.section-title');
+                        if (titleEl) titleEl.innerHTML = '📋 Butiran Barang Simpanan Al Saleem';
+
+                        const table = cards[0].querySelector('.section-table');
+                        if (table) {
+                            const thead = table.querySelector('thead');
+                            if (thead) {
+                                thead.innerHTML = `
+                                    <tr>
+                                        <th class="text-center" style="width: 25px;">BIL</th>
+                                        <th>Mutu</th>
+                                        <th class="text-center">Berat (g)</th>
+                                        <th class="text-center">Harga Semasa/g</th>
+                                        <th class="text-right">Nilai Marhun</th>
+                                    </tr>
+                                `;
+                            }
+
+                            const tbody = document.getElementById('itemsTableBody');
+                            if (tbody) {
+                                tbody.innerHTML = '';
+                                data.items.forEach((it, idx) => {
+                                    const tr = document.createElement('tr');
+                                    tr.innerHTML = `
+                                        <td class="text-center">${idx + 1}</td>
+                                        <td><b>${it.grade}</b></td>
+                                        <td class="text-center">${it.weight.toFixed(2)} g</td>
+                                        <td class="text-center">${formatCur(it.price)}/g</td>
+                                        <td class="text-right"><b>${formatCur(it.marhun)}</b></td>
+                                    `;
+                                    tbody.appendChild(tr);
+                                });
+                            }
+
+                            const tfoot = table.querySelector('tfoot');
+                            if (tfoot) {
+                                tfoot.innerHTML = `
+                                    <tr class="total-row">
+                                        <td colspan="2" class="text-right">Jumlah:</td>
+                                        <td class="text-center"><b>${data.totalWeight.toFixed(2)} g</b></td>
+                                        <td></td>
+                                        <td class="text-right"><b>${formatCur(data.totalMarhun)}</b></td>
+                                    </tr>
+                                `;
+                            }
+                        }
+                    }
+
+                    // Sembunyikan repayment schedule & tunjuk simulasi tempoh
+                    const schedCard = document.querySelector('.schedule-card');
+                    if (schedCard) {
+                        schedCard.innerHTML = `
+                            <div class="section-title">📅 Simulasi Tempoh & Kadar Upah Terkumpul</div>
+                            <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; font-size: 11px; margin-top: 10px;">
+                                <div>
+                                    <table class="section-table">
+                                        <tr><td>Tarikh Mula Simpan:</td><td align="right"><b>${formatDate(data.pawnDate)}</b></td></tr>
+                                        <tr><td>Tarikh Penebusan:</td><td align="right"><b>${formatDate(data.endDate)}</b></td></tr>
+                                        <tr><td>Bilangan Hari Simpanan:</td><td align="right" class="text-green"><b>${data.days} Hari</b></td></tr>
+                                    </table>
+                                </div>
+                                <div>
+                                    <table class="section-table">
+                                        <tr><td>Kadar Upah Simpan Harian:</td><td align="right"><b>${formatCur(data.totalDailyRate)} / hari</b></td></tr>
+                                        <tr class="net-row-total">
+                                            <td style="padding: 6px 4px;">Jumlah Upah Simpan Terkumpul:</td>
+                                            <td style="padding: 6px 4px;" align="right" class="text-red"><b>${formatCur(data.totalUpah)}</b></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    const notesEl = document.querySelector('.notes');
+                    if (notesEl) {
+                        notesEl.innerHTML = `
+                            <p>Sila semak dokumen rasmi anda sebelum meninggalkan kaunter. Resit simpanan selamat rasmi akan dikeluarkan oleh sistem komputer kaunter setelah transaksi selesai.</p>
+                        `;
+                    }
+
+                    // PDF filename
+                    const today = new Date();
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const yyyy = today.getFullYear();
+                    const defaultPdfName = `Slip_Simulasi_AlSaleem_${dd}${mm}${yyyy}.pdf`;
+
+                    // Bind button event listeners
+                    document.getElementById('btnPrint').addEventListener('click', async () => {
+                        const btn = document.getElementById('btnPrint');
+                        btn.disabled = true;
+                        await window.api.printToPrinter();
+                        btn.disabled = false;
+                    });
+
+                    document.getElementById('btnPdf').addEventListener('click', async () => {
+                        const btn = document.getElementById('btnPdf');
+                        btn.disabled = true;
+                        const res = await window.api.printToPDF(defaultPdfName);
+                        if (res && res.success) {
+                            console.log('PDF saved successfully to:', res.filePath);
+                        }
+                        btn.disabled = false;
+                    });
+
+                    document.getElementById('btnClose').addEventListener('click', async () => {
+                        await window.api.closePrintWindow();
+                    });
+
+                    return;
+                }
+
+                if (data.isPurchase) {
+                    // Inject compact styles for professional printing layout
+                    const style = document.createElement('style');
+                    style.innerHTML = `
+                        body {
+                            padding: 20px 25px !important;
+                            font-size: 10px !important;
+                        }
+                        .header {
+                            margin-bottom: 12px !important;
+                            padding-bottom: 6px !important;
+                        }
+                        .header h2 {
+                            font-size: 16px !important;
+                        }
+                        .warning-banner {
+                            padding: 6px 10px !important;
+                            font-size: 9.5px !important;
+                            margin-bottom: 12px !important;
+                        }
+                        .section-card {
+                            padding: 12px !important;
+                        }
+                        .section-table th {
+                            padding: 5px 6px !important;
+                            font-size: 9.5px !important;
+                            background: #f8fafc !important;
+                        }
+                        .section-table td {
+                            padding: 5px 6px !important;
+                            font-size: 9.5px !important;
+                        }
+                        .notes {
+                            margin-top: 15px !important;
+                            padding-top: 10px !important;
+                            font-size: 8.5px !important;
+                        }
+                    `;
+                    document.head.appendChild(style);
+
+                    // Populate Header
+                    document.querySelector('.header h2').textContent = 'SLIP SIMULASI BELIAN EMAS';
+                    document.getElementById('productLabel').textContent = 'JENIS TRANSAKSI: BELIAN BALIK EMAS';
+                    document.getElementById('dateLabel').textContent = `Tarikh: ${formatDate(data.pawnDate)}`;
+
+                    // Full width layout
+                    const gridContainer = document.querySelector('.grid-container');
+                    if (gridContainer) gridContainer.style.display = 'block';
+
+                    const cards = document.querySelectorAll('.grid-container .section-card');
+                    if (cards.length > 1) cards[1].style.display = 'none';
+
+                    if (cards[0]) {
+                        cards[0].style.width = '100%';
+                        const titleEl = cards[0].querySelector('.section-title');
+                        if (titleEl) titleEl.innerHTML = '📋 Butiran Barang Belian Emas';
+
+                        const table = cards[0].querySelector('.section-table');
+                        if (table) {
+                            const thead = table.querySelector('thead');
+                            if (thead) {
+                                thead.innerHTML = `
+                                    <tr>
+                                        <th class="text-center" style="width: 25px;">BIL</th>
+                                        <th>Mutu</th>
+                                        <th class="text-center">Berat (g)</th>
+                                        <th class="text-center">Harga/g</th>
+                                        <th class="text-center">Kadar Belian</th>
+                                        <th class="text-right">Harga Belian/g</th>
+                                        <th class="text-right">Nilai Marhun</th>
+                                        <th class="text-right">Nilai Belian</th>
+                                    </tr>
+                                `;
+                            }
+
+                            const tbody = document.getElementById('itemsTableBody');
+                            if (tbody) {
+                                tbody.innerHTML = '';
+                                data.items.forEach((it, idx) => {
+                                    const tr = document.createElement('tr');
+                                    tr.innerHTML = `
+                                        <td class="text-center">${idx + 1}</td>
+                                        <td><b>${it.grade}</b></td>
+                                        <td class="text-center">${it.weight.toFixed(2)} g</td>
+                                        <td class="text-center">${formatCur(it.price)}/g</td>
+                                        <td class="text-center">${it.rate}%</td>
+                                        <td class="text-right">${formatCur(it.belianPrice)}/g</td>
+                                        <td class="text-right">${formatCur(it.marhun)}</td>
+                                        <td class="text-right"><b>${formatCur(it.purchaseValue)}</b></td>
+                                    `;
+                                    tbody.appendChild(tr);
+                                });
+                            }
+
+                            const tfoot = table.querySelector('tfoot');
+                            if (tfoot) {
+                                tfoot.innerHTML = `
+                                    <tr class="net-row-total" style="font-weight: bold; background-color: #fffdf5;">
+                                        <td colspan="2" class="text-right">Jumlah:</td>
+                                        <td class="text-center"><b>${data.totalWeight.toFixed(2)} g</b></td>
+                                        <td colspan="3"></td>
+                                        <td class="text-right"><b>${formatCur(data.totalMarhun)}</b></td>
+                                        <td class="text-right text-green" style="font-size: 11px;"><b>${formatCur(data.totalPurchase)}</b></td>
+                                    </tr>
+                                `;
+                            }
+                        }
+                    }
+
+                    const schedCard = document.querySelector('.schedule-card');
+                    if (schedCard) schedCard.style.display = 'none';
+
+                    const notesEl = document.querySelector('.notes');
+                    if (notesEl) {
+                        notesEl.innerHTML = `
+                            <p>Sila semak jumlah wang tunai dan baki sebelum meninggalkan kaunter. Resit rasmi belian akan dikeluarkan oleh sistem komputer kaunter setelah transaksi sah diselesaikan.</p>
+                        `;
+                    }
+
+                    // Save PDF Name
+                    const today = new Date();
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const yyyy = today.getFullYear();
+                    const defaultPdfName = `Slip_Simulasi_Belian_Emas_${dd}${mm}${yyyy}.pdf`;
+
+                    // Bind button event listeners
+                    document.getElementById('btnPrint').addEventListener('click', async () => {
+                        const btn = document.getElementById('btnPrint');
+                        btn.disabled = true;
+                        await window.api.printToPrinter();
+                        btn.disabled = false;
+                    });
+
+                    document.getElementById('btnPdf').addEventListener('click', async () => {
+                        const btn = document.getElementById('btnPdf');
+                        btn.disabled = true;
+                        const res = await window.api.printToPDF(defaultPdfName);
+                        if (res && res.success) {
+                            console.log('PDF saved successfully to:', res.filePath);
+                        }
+                        btn.disabled = false;
+                    });
+
+                    document.getElementById('btnClose').addEventListener('click', async () => {
+                        await window.api.closePrintWindow();
+                    });
+
+                    return;
+                }
+
+                // Populate Header
+                document.getElementById('productLabel').textContent = `PRODUK: ${data.productName.toUpperCase()}`;
+                document.getElementById('dateLabel').textContent = `Tarikh: ${formatDate(data.pawnDate)}`;
+
+                // Populate Items Table
+                const itemsBody = document.getElementById('itemsTableBody');
+                data.items.forEach((it, idx) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="text-center">${idx + 1}</td>
+                        <td><b>${it.grade}</b></td>
+                        <td class="text-center">${formatCur(it.price)}/g</td>
+                        <td class="text-center">${it.weight.toFixed(2)} g</td>
+                        <td class="text-right">${formatCur(it.marhun)}</td>
+                    `;
+                    itemsBody.appendChild(tr);
+                });
+                document.getElementById('totalWeightVal').textContent = `${data.totalWeight.toFixed(2)} g`;
+                document.getElementById('totalMarhunVal').textContent = formatCur(data.totalMarhun);
+
+                // Populate Financial breakdown
+                const finBody = document.getElementById('financialTableBody');
+                const rows = [];
+
+                rows.push(['Nilai Marhun Keseluruhan', formatCur(data.totalMarhun)]);
+
+                const customPercent = data.totalMarhun > 0 ? ((data.financingAmount / data.totalMarhun) * 100).toFixed(1) : data.selectedProduct.margin;
+                rows.push([`Pembiayaan (${customPercent}%)`, `<b>${formatCur(data.financingAmount)}</b>`]);
+
+                if (data.belianEmas > 0) {
+                    rows.push(['Belian Emas (Tunai)', `<span class="text-green">+${formatCur(data.belianEmas)}</span>`]);
+                }
+
+                data.otherCashItems.forEach(o => {
+                    rows.push([o.name, `<span class="text-green">+${formatCur(o.val)}</span>`]);
+                });
+
+                rows.push(['Upah Simpan (Harian)', formatCur(data.dailyRate)]);
+                rows.push(['Upah Simpan (Awal 60 Hari)', `<span class="text-red">-${formatCur(data.upah60Days)}</span>`]);
+
+                if (data.iProtect > 0) {
+                    rows.push([data.iProtectLabel, `<span class="text-red">-${formatCur(data.iProtect)}</span>`]);
+                }
+                if (data.iProtectTransFee > 0) {
+                    rows.push(['Caj Transaksi I-Protect', `<span class="text-red">-${formatCur(data.iProtectTransFee)}</span>`]);
+                }
+                if (data.flexiPa > 0) {
+                    rows.push(['Flexi PA', `<span class="text-red">-${formatCur(data.flexiPa)}</span>`]);
+                }
+                if (data.newMember > 0) {
+                    rows.push(['Ahli Baru', `<span class="text-red">-${formatCur(data.newMember)}</span>`]);
+                }
+                if (data.sag > 0) {
+                    rows.push(['Caj Kehilangan SAG', `<span class="text-red">-${formatCur(data.sag)}</span>`]);
+                }
+                if (data.suratWakilTebus > 0) {
+                    rows.push(['Caj Surat Wakil Tebus', `<span class="text-red">-${formatCur(data.suratWakilTebus)}</span>`]);
+                }
+                if (data.cuci > 0) {
+                    rows.push(['Cuci Emas', `<span class="text-red">-${formatCur(data.cuci)}</span>`]);
+                }
+                if (data.uji > 0) {
+                    rows.push(['Uji Emas', `<span class="text-red">-${formatCur(data.uji)}</span>`]);
+                }
+
+                data.othersItems.forEach(o => {
+                    rows.push([o.name, `<span class="text-red">-${formatCur(o.val)}</span>`]);
+                });
+
+                data.oldTickets.forEach(t => {
+                    rows.push([`Tebus Surat Lama (${t.ref || 'Tiada Rujukan'})`, `<span class="text-red">-${formatCur(t.amt)}</span>`]);
+                });
+
+                rows.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${r[0]}</td><td class="text-right">${r[1]}</td>`;
+                    finBody.appendChild(tr);
+                });
+
+                // Add net / deficit total
+                const netTr = document.createElement('tr');
+                netTr.className = 'net-row-total';
+                if (data.netReceivedStandard < 0) {
+                    netTr.innerHTML = `
+                        <td style="padding: 8px 4px;" class="text-red">Pelanggan Perlu Tambah Tunai (Defisit)</td>
+                        <td style="padding: 8px 4px;" class="text-right text-red">-${formatCur(data.deficit)}</td>
+                    `;
+                    finBody.appendChild(netTr);
+
+                    if (data.cashPaid > 0) {
+                        const trPaid = document.createElement('tr');
+                        trPaid.innerHTML = `<td>Tunai Diterima</td><td class="text-right"><b>${formatCur(data.cashPaid)}</b></td>`;
+                        finBody.appendChild(trPaid);
+
+                        const trChange = document.createElement('tr');
+                        trChange.className = 'net-row-total';
+                        trChange.innerHTML = `
+                            <td style="padding: 6px 4px;">Baki</td>
+                            <td style="padding: 6px 4px;" class="text-right ${data.hasEnoughPaid ? 'text-green' : 'text-red'}">${data.changeValStr}</td>
+                        `;
+                        finBody.appendChild(trChange);
+                    }
+                } else {
+                    netTr.innerHTML = `
+                        <td style="padding: 8px 4px;" class="text-green">Jumlah Bersih Diterima Pelanggan</td>
+                        <td style="padding: 8px 4px;" class="text-right text-green">${formatCur(data.netReceivedStandard)}</td>
+                    `;
+                    finBody.appendChild(netTr);
+                }
+
+                // Populate Repayment Schedule
+                const schedBody = document.getElementById('scheduleTableBody');
+                const basicTenure = data.selectedProduct.tenure;
+                const basicDays = basicTenure * 30;
+                const dateBasicExpiryStr = formatDate(data.dateBasicExpiry);
+                const upahExtended = data.dailyRate * 120;
+                const totalRedeemExtended = data.financingAmount + upahExtended;
+
+                let schedHtml = '';
+                if (data.selectedProduct.canExtend) {
+                    const dateExtendedExpiry = new Date(data.pawnDate);
+                    dateExtendedExpiry.setMonth(dateExtendedExpiry.getMonth() + 10);
+                    const dateExtendedExpiryStr = formatDate(dateExtendedExpiry);
+
+                    schedHtml = `
+                        <tr class="group-header"><td colspan="2">Fasa 1: Tempoh Asas (6 Bulan / 180 Hari)</td></tr>
+                        <tr><td>Tarikh Gadai:</td><td align="right"><b>${formatDate(data.pawnDate)}</b></td></tr>
+                        <tr><td>Tarikh Tamat Tempoh Asas:</td><td align="right" class="text-red"><b>${dateBasicExpiryStr}</b></td></tr>
+                        <tr><td>Upah Simpan Asas (180 Hari):</td><td align="right">${formatCur(data.upahBasicTotal)}</td></tr>
+                        <tr class="text-red"><td>(-) Upah Simpan 60 Hari (Dibayar Awal):</td><td align="right">-${formatCur(data.upah60Days)}</td></tr>
+                        <tr style="font-weight:bold;"><td>Baki Upah Wajib Bayar:</td><td align="right" class="text-red">${formatCur(data.upahBasicBal)}</td></tr>
+                        <tr><td>Jumlah Pembiayaan (Pokok):</td><td align="right">${formatCur(data.financingAmount)}</td></tr>
+                        <tr class="total-row-highlight"><td>Anggaran Tebus Bulan ke-6:</td><td align="right">${formatCur(data.totalRedeemBasic)}</td></tr>
+                        <tr style="font-style: italic; font-size: 9.5px; color: #555;">
+                            <td colspan="2">
+                                <b>Ansuran bulanan tebus: ${formatCur(data.totalRedeemBasic / 6)} / sebulan (selama 6 bulan).</b><br>
+                                *Nota Pengiraan Ansuran: (Pokok RM ${data.financingAmount.toFixed(2)} + Baki Upah Asas RM ${data.upahBasicBal.toFixed(2)}) / 6 bulan.
+                            </td>
+                        </tr>
+                        
+                        <tr class="group-header"><td colspan="2">Fasa 2: Tempoh Lanjutan (2 + 2 Bulan / 120 Hari Tambahan)</td></tr>
+                        <tr style="font-style: italic; font-size: 9.5px; color: #666;"><td colspan="2">* Syarat Lanjutan: Bayar baki upah simpan asas (${formatCur(data.upahBasicBal)}) sebelum/pada ${dateBasicExpiryStr}.</td></tr>
+                        <tr><td>Tarikh Akhir Wajib Tebus:</td><td align="right" class="text-red"><b>${dateExtendedExpiryStr}</b></td></tr>
+                        <tr><td>Upah Simpan Lanjutan (120 Hari):</td><td align="right">${formatCur(upahExtended)}</td></tr>
+                        <tr><td>Jumlah Pembiayaan (Pokok):</td><td align="right">${formatCur(data.financingAmount)}</td></tr>
+                        <tr class="total-row-highlight" style="color: #e53e3e;"><td>Jumlah Tebus Bulan ke-10:</td><td align="right">${formatCur(totalRedeemExtended)}</td></tr>
+                        <tr style="font-style: italic; font-size: 9.5px; color: #555;">
+                            <td colspan="2">
+                                <b>Simulasi ansuran bulanan (10 bulan): ${formatCur((data.financingAmount + data.upahBasicBal + upahExtended) / 10)} / sebulan.</b><br>
+                                *Nota Aliran & Pengiraan Ansuran: (Pokok RM ${data.financingAmount.toFixed(2)} + Baki Upah Asas RM ${data.upahBasicBal.toFixed(2)} + Upah Lanjutan RM ${upahExtended.toFixed(2)}) / 10 bulan. Bayaran ansuran bulanan hendaklah didahulukan untuk melunaskan Baki Upah Simpan Asas (RM ${data.upahBasicBal.toFixed(2)}) sebelum/pada ${dateBasicExpiryStr} bagi melayakkan lanjutan tempoh 4 bulan (Fasa 2) sebelum baki bayaran digunakan untuk Pokok Pembiayaan.
+                            </td>
+                        </tr>
+                        <tr><td colspan="2" class="text-red" style="font-weight: bold; text-align: center; padding-top: 10px;">⚠️ PERINGATAN: WAJIB TEBUS. Tiada lanjutan/tukar surat selepas 10 bulan.</td></tr>
+                    `;
+                } else {
+                    schedHtml = `
+                        <tr class="group-header"><td colspan="2">Tempoh Asas (${basicTenure} Bulan / ${basicDays} Hari)</td></tr>
+                        <tr><td>Tarikh Gadai:</td><td align="right"><b>${formatDate(data.pawnDate)}</b></td></tr>
+                        <tr><td>Tamat Tempoh:</td><td align="right" class="text-red"><b>${dateBasicExpiryStr}</b></td></tr>
+                        <tr><td>Upah Simpan Asas (${basicDays} Hari):</td><td align="right">${formatCur(data.upahBasicTotal)}</td></tr>
+                        <tr class="text-red"><td>(-) Upah Simpan 60 Hari (Dibayar Awal):</td><td align="right">-${formatCur(data.upah60Days)}</td></tr>
+                        <tr style="font-weight:bold;"><td>Baki Upah Wajib Bayar:</td><td align="right" class="text-red">${formatCur(data.upahBasicBal)}</td></tr>
+                        <tr><td>Jumlah Pembiayaan (Pokok):</td><td align="right">${formatCur(data.financingAmount)}</td></tr>
+                        <tr class="total-row-highlight" style="color: #e53e3e;"><td>Jumlah Tebus Bulan ke-${basicTenure}:</td><td align="right">${formatCur(data.totalRedeemBasic)}</td></tr>
+                        <tr style="font-style: italic; font-size: 9.5px; color: #555;">
+                            <td colspan="2">
+                                <b>Ansuran bulanan tebus: ${formatCur(data.totalRedeemBasic / basicTenure)} / sebulan (selama ${basicTenure} bulan).</b><br>
+                                *Nota Pengiraan Ansuran: (Pokok RM ${data.financingAmount.toFixed(2)} + Baki Upah Asas RM ${data.upahBasicBal.toFixed(2)}) / ${basicTenure} bulan.
+                            </td>
+                        </tr>
+                        <tr><td colspan="2" class="text-red" style="font-weight: bold; text-align: center; padding-top: 10px;">⚠️ PERINGATAN: WAJIB TEBUS. Produk ${data.selectedProduct.name} tiada tempoh lanjutan.</td></tr>
+                    `;
+                }
+                schedBody.innerHTML = schedHtml;
+
+                // Generate clean PDF filename
+                let productNameCleaned = (data.selectedProduct && data.selectedProduct.name || 'Simulasi').replace(/[^a-zA-Z0-9]/g, '_');
+                const today = new Date();
+                const dd = String(today.getDate()).padStart(2, '0');
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const yyyy = today.getFullYear();
+                const defaultPdfName = `Slip_Simulasi_ArRahnu_${productNameCleaned}_${dd}${mm}${yyyy}.pdf`;
+
+                // Bind button event listeners
+                document.getElementById('btnPrint').addEventListener('click', async () => {
+                    const btn = document.getElementById('btnPrint');
+                    btn.disabled = true;
+                    await window.api.printToPrinter();
+                    btn.disabled = false;
+                });
+
+                document.getElementById('btnPdf').addEventListener('click', async () => {
+                    const btn = document.getElementById('btnPdf');
+                    btn.disabled = true;
+                    const res = await window.api.printToPDF(defaultPdfName);
+                    if (res && res.success) {
+                        console.log('PDF saved successfully to:', res.filePath);
+                    }
+                    btn.disabled = false;
+                });
+
+                document.getElementById('btnClose').addEventListener('click', async () => {
+                    await window.api.closePrintWindow();
+                });
+
+            } catch (err) {
+                console.error('Failed to load printing data:', err);
+            }
+        });
+    </script>
+</body>
+
+</html>

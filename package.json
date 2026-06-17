@@ -1,0 +1,40 @@
+{
+  "name": "ar-rahnu-v2-exe",
+  "version": "1.0.0",
+  "description": "Kalkulator Ar Rahnu V2 - Desktop Application",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "setup": "node scripts/setup.js",
+    "postinstall": "npm run setup && npm run rebuild",
+    "rebuild": "electron-rebuild",
+    "build": "electron-builder"
+  },
+  "keywords": [
+    "ar-rahnu",
+    "electron",
+    "sqlite"
+  ],
+  "author": "Antigravity",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^11.3.0"
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.3",
+    "@electron/rebuild": "^4.0.4"
+  },
+  "build": {
+    "appId": "com.yapeim.arrahnuv2",
+    "productName": "ArRahnuCalcV2",
+    "win": {
+      "target": "portable",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ]
+  }
+}

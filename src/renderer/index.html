@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com;">
+    <title>Kalkulator Ar Rahnu V2</title>
+    <link href="fonts/outfit.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- App Container -->
+    <div class="app-layout">
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary-color)">
+                        <path d="m16 16 3-8 3 8c-.1.3-.3.5-.6.5h-4.8c-.3 0-.5-.2-.6-.5Z" />
+                        <path d="m2 16 3-8 3 8c-.1.3-.3.5-.6.5H2.6c-.3 0-.5-.2-.6-.5Z" />
+                        <path d="M7 21h10" />
+                        <path d="M12 3v18" />
+                        <path d="M3 7h18" />
+                    </svg>
+                </div>
+                <div class="brand-name">
+                    Ar Rahnu <span class="gold-text">V2</span>
+                    <span class="brand-sub">Sistem Simulasi Desktop</span>
+                </div>
+                <button id="sidebarToggle" class="sidebar-toggle-btn" title="Lipat Menu">◀</button>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-target="calculator-view">
+                    <span class="menu-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                            <line x1="8" y1="6" x2="16" y2="6"></line>
+                            <line x1="16" y1="14" x2="16" y2="18"></line>
+                            <path d="M16 10h.01"></path>
+                            <path d="M12 10h.01"></path>
+                            <path d="M8 10h.01"></path>
+                            <path d="M12 14h.01"></path>
+                            <path d="M8 14h.01"></path>
+                            <path d="M12 18h.01"></path>
+                            <path d="M8 18h.01"></path>
+                        </svg></span>
+                    <span class="menu-label">Kalkulator Ar Rahnu</span>
+                </a>
+                <a href="#" class="menu-item" data-target="purchase-calculator-view">
+                    <span class="menu-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg></span>
+                    <span class="menu-label">Kalkulator Belian</span>
+                </a>
+                <a href="#" class="menu-item" data-target="alsaleem-calculator-view">
+                    <span class="menu-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M12 2a5 5 0 0 0-5 5v4h10V7a5 5 0 0 0-5-5z"></path>
+                        </svg></span>
+                    <span class="menu-label">Kalkulator Al Saleem</span>
+                </a>
+                <a href="#" class="menu-item" data-target="chart-view">
+                    <span class="menu-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg></span>
+                    <span class="menu-label">Graf Sejarah</span>
+                </a>
+                <a href="#" class="menu-item" data-target="manage-prices-view">
+                    <span class="menu-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg></span>
+                    <span class="menu-label">Urus Harga Emas</span>
+                </a>
+                <a href="#" class="menu-item" data-target="guide-view">
+                    <span class="menu-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg></span>
+                    <span class="menu-label">Panduan</span>
+                </a>
+                <a href="#" class="menu-item" data-target="about-view">
+                    <span class="menu-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg></span>
+                    <span class="menu-label">
+                        Tentang
+                        <span id="update-dot" style="display: none; width: 8px; height: 8px; background-color: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger); margin-left: 8px;"></span>
+                    </span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="offline-badge">
+                    <span class="badge-dot"></span> Mod Luar Talian
+                </div>
+                <div class="app-version">Versi 1.0</div>
+                <div class="developer-name"
+                    style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; opacity: 0.85;">by zuwan aufa
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- Warning Marquee Banner -->
+            <div class="warning-banner">
+                <div class="warning-badge">⚠️ AMARAN PENTING</div>
+                <div class="warning-ticker">
+                    <marquee behavior="scroll" direction="left" scrollamount="7">
+                        KALKULATOR INI DIBANGUNKAN KHAS UNTUK RUJUKAN DALAMAN SAHAJA. SEBARANG RISIKO, KERUGIAN, ATAU
+                        KESILAPAN PENGIRAAN ADALAH DI BAWAH TANGGUNGJAWAB PENGGUNA SEPENUHNYA. PEMBANGUN APLIKASI
+                        DILEPASKAN DARIPADA SEBARANG LIABILITI.
+                    </marquee>
+                </div>
+            </div>
+
+            <!-- Header Panel -->
+            <header class="view-header">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button id="mobileMenuToggle" class="mobile-menu-btn" title="Buka Menu">☰</button>
+                    <div>
+                        <h1 id="view-title">Kalkulator Ar Rahnu</h1>
+                        <p id="view-subtitle" class="text-muted">Simulasi pembiayaan dan bayaran balik Ar Rahnu</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button id="themeToggleBtn" class="btn btn-outline btn-xs" title="Tukar Tema"
+                        style="font-size: 1.1rem; padding: 6px 12px;">☀️</button>
+                    <div class="date-badge" id="currentDateDisplay">Tarikh: --/--/----</div>
+                </div>
+            </header>
+
+            <!-- VIEW: Calculator -->
+            <div id="calculator-view" class="view-panel active">
+                <div class="calculator-grid">
+
+                    <!-- Form Columns (Left) -->
+                    <div class="form-column">
+
+                        <!-- Announcement Card -->
+                        <div class="card card-accent">
+                            <h3 class="card-title">📢 Makluman Semasa</h3>
+                            <p class="text-sm">
+                                Aplikasi ini disesuaikan berdasarkan pindaan gadaian bermula 1 Julai 2026. Fungsi
+                                gadaian semula telah ditiadakan. Simulasi jadual ansuran bulanan kini merangkumi Fasa 1
+                                (Asas) dan Fasa 2 (Lanjutan). Pastikan mutu dan berat emas diisi dengan teliti sebelum
+                                membua transaksi.
+                            </p>
+                        </div>
+
+                        <!-- Calculation Tabs Bar -->
+                        <div class="calc-tabs-bar" id="calcTabsBar"></div>
+
+                        <!-- Product Section -->
+                        <section class="form-section">
+                            <h2 class="section-title">📦 Pilihan Produk</h2>
+                            <div class="products-grid" id="productsContainer">
+                                <!-- Populated by JS -->
+                            </div>
+                        </section>
+
+                        <!-- Items Section -->
+                        <section class="form-section">
+                            <h2 class="section-title">💎 Barang Gadaian</h2>
+                            <div id="itemsContainer">
+                                <!-- Populated by JS -->
+                            </div>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button class="btn btn-secondary btn-sm" onclick="addNewItemRow()">➕ Tambah
+                                    Barang</button>
+                                <button class="btn btn-outline btn-sm" onclick="resetCalculator()">🔄 Set
+                                    Semula</button>
+                            </div>
+                        </section>
+
+                        <!-- Tebus Surat Gadaian Lama Section -->
+                        <section class="form-section">
+                            <h2 class="section-title">📄 Tebus Surat Gadaian Lama</h2>
+                            <p class="section-desc text-muted">
+                                Masukkan butiran surat gadaian lama yang ingin ditebus menggunakan hasil pembiayaan baru
+                                ini.
+                            </p>
+                            <div id="oldTicketsContainer">
+                                <!-- Populated by JS -->
+                            </div>
+                            <button class="btn btn-secondary btn-sm" onclick="addNewOldTicketRow()">➕ Tambah Surat
+                                Lama</button>
+                        </section>
+
+                        <!-- Additional Charges Section -->
+                        <section class="form-section">
+                            <h2 class="section-title">⚙️ Produk & Caj Tambahan</h2>
+
+                            <div class="options-list">
+                                <div class="option-item">
+                                    <div class="option-info">
+                                        <div class="option-label">Belian Emas (Tunai)</div>
+                                        <div class="option-desc">Jumlah tunai tambahan yang diterima pelanggan</div>
+                                    </div>
+                                    <div class="input-currency">
+                                        <span class="currency-symbol">RM</span>
+                                        <input type="number" id="belianEmasVal" placeholder="0.00" step="0.01">
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Other Cash Items -->
+                                <div class="nested-option-group">
+                                    <div class="option-label text-sm">Lain-lain Tunai Tambahan (Diterima)</div>
+                                    <div id="otherCashContainer" class="dynamic-inputs-container">
+                                        <!-- Dynamic rows -->
+                                    </div>
+                                    <button class="btn btn-outline btn-xs" onclick="addOtherCashRow()">➕ Tambah Tunai
+                                        Lain</button>
+                                </div>
+
+                                <div class="option-item">
+                                    <div class="option-info">
+                                        <div class="option-label">I-Protect 1.0 (Takaful)</div>
+                                        <div class="option-desc">Premium RM 1.25 bagi setiap gandaan RM1,000 Marhun
+                                        </div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="iprotect1_cb" onchange="handleIProtectChange('1.0')">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+
+                                <div class="option-item">
+                                    <div class="option-info">
+                                        <div class="option-label">I-Protect 2.0 (Takaful)</div>
+                                        <div class="option-desc">Premium RM 2.50 / RM1,000 Marhun + Caj Transaksi RM1.50
+                                        </div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="iprotect2_cb" onchange="handleIProtectChange('2.0')">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+
+                                <div class="option-item">
+                                    <div class="option-info">
+                                        <div class="option-label">Flexi PA</div>
+                                        <div class="option-desc">Caj Etiqa tetap bernilai RM 64.80</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="flexipa_cb">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+
+                                <div class="option-item">
+                                    <div class="option-info">
+                                        <div class="option-label">Ahli Baru</div>
+                                        <div class="option-desc">Yuran keahlian bernilai RM 10.00</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="newmember_cb">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+
+                                <div class="option-item">
+                                    <div class="option-info">
+                                        <div class="option-label">Caj Kehilangan SAG</div>
+                                        <div class="option-desc">Dikenakan caj bernilai RM 10.00</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="sag_cb">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+
+                                <div class="option-item">
+                                    <div class="option-info">
+                                        <div class="option-label">Caj Surat Wakil Tebus</div>
+                                        <div class="option-desc">Dikenakan caj bernilai RM 10.00</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="suratWakilTebus_cb">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+
+                                <div class="option-item">
+                                    <div class="option-info">
+                                        <div class="option-label">Cuci Emas</div>
+                                        <div class="option-desc">Caj perkhidmatan mencuci emas</div>
+                                    </div>
+                                    <div class="input-currency">
+                                        <span class="currency-symbol">RM</span>
+                                        <input type="number" id="cuciEmasVal" placeholder="0.00" step="0.01">
+                                    </div>
+                                </div>
+
+                                <div class="option-item">
+                                    <div class="option-info">
+                                        <div class="option-label">Uji Emas</div>
+                                        <div class="option-desc">Caj perkhidmatan menentu ukur mutu emas</div>
+                                    </div>
+                                    <div class="input-currency">
+                                        <span class="currency-symbol">RM</span>
+                                        <input type="number" id="ujiEmasVal" placeholder="0.00" step="0.01">
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Other Charges -->
+                                <div class="nested-option-group">
+                                    <div class="option-label text-sm">Lain-lain Caj / Potongan</div>
+                                    <div id="othersContainer" class="dynamic-inputs-container">
+                                        <!-- Dynamic rows -->
+                                    </div>
+                                    <button class="btn btn-outline btn-xs" onclick="addOtherRow()">➕ Tambah Caj
+                                        Lain</button>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Summary Column (Right - Sticky) -->
+                    <div class="summary-column">
+                        <div class="sticky-card">
+                            <h2 class="summary-title">📊 Rumusan Pembiayaan Baru</h2>
+
+                            <!-- Initial prompt before calculation data is ready -->
+                            <div id="calc-prompt" class="calc-prompt">
+                                <div class="prompt-icon">ℹ️</div>
+                                <div>Sila pilih produk dan masukkan berat barang gadaian untuk menjana rumusan
+                                    pengiraan.</div>
+                            </div>
+
+                            <!-- Result Content -->
+                            <div id="calc-results" class="calc-results" style="display: none;">
+                                <div id="standardResultContent">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+
+                                <div class="card card-warning mt-4">
+                                    <p class="text-xs">
+                                        <strong>Peringatan Semakan Manual:</strong> Sistem digital ini bertujuan
+                                        membantu pengiraan. Ketelitian kakitangan untuk menyemak semula secara manual
+                                        amat digalakkan bagi mengelakkan ralat.
+                                    </p>
+                                </div>
+
+                                <button class="btn btn-primary btn-block mt-4" onclick="showPrintWarning()">🖨️ Cetak
+                                    Simulasi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Purchase Calculator -->
+            <div id="purchase-calculator-view" class="view-panel">
+                <div class="calculator-grid">
+
+                    <!-- Form Columns (Left) -->
+                    <div class="form-column">
+
+                        <!-- Announcement Card -->
+                        <div class="card card-accent">
+                            <h3 class="card-title">📢 Makluman Belian Emas</h3>
+                            <p class="text-sm">
+                                Pengiraan kadar belian emas adalah berdasarkan peratusan mengikut mutu. Sila pastikan
+                                mutu dan berat bersih barang kemas dimasukkan dengan tepat untuk menjana nilai belian.
+                            </p>
+                        </div>
+
+                        <!-- Calculation Tabs Bar -->
+                        <div class="calc-tabs-bar" id="purchaseCalcTabsBar"></div>
+
+                        <!-- Items Section -->
+                        <section class="form-section">
+                            <h2 class="section-title">💎 Barang Belian Emas</h2>
+                            <div id="purchaseItemsContainer">
+                                <!-- Populated by JS -->
+                            </div>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button class="btn btn-secondary btn-sm" onclick="addNewPurchaseItemRow()">➕ Tambah
+                                    Barang</button>
+                                <button class="btn btn-outline btn-sm" onclick="resetPurchaseCalculator()">🔄 Set
+                                    Semula</button>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Summary Column (Right - Sticky) -->
+                    <div class="summary-column">
+                        <div class="sticky-card">
+                            <h2 class="summary-title">📊 Rumusan Belian Emas</h2>
+
+                            <!-- Initial prompt before calculation data is ready -->
+                            <div id="purchase-calc-prompt" class="calc-prompt">
+                                <div class="prompt-icon">ℹ️</div>
+                                <div>Sila pilih mutu emas dan berat segram untuk menjana rumusan belian balik.</div>
+                            </div>
+
+                            <!-- Result Content -->
+                            <div id="purchase-calc-results" class="calc-results" style="display: none;">
+                                <div id="purchaseResultContent">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+
+                                <div class="card card-warning mt-4">
+                                    <p class="text-xs">
+                                        <strong>Peringatan Semakan Manual:</strong> Sistem digital ini bertujuan
+                                        membantu pengiraan transaksi belian emas. Tetapi masih terdedah kepada ralat
+                                        tidak dijangka. Semak semula nilai belian yang telah dijana.
+                                    </p>
+                                </div>
+
+                                <button class="btn btn-primary btn-block mt-4" onclick="showPrintWarning()">🖨️ Cetak
+                                    Simulasi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Al Saleem Calculator -->
+            <div id="alsaleem-calculator-view" class="view-panel">
+                <div class="calculator-grid">
+
+                    <!-- Form Columns (Left) -->
+                    <div class="form-column">
+
+                        <!-- Announcement Card -->
+                        <div class="card card-accent">
+                            <h3 class="card-title">📢 Makluman Al-Saleem</h3>
+                            <p class="text-sm">
+                                Al Saleem merupakan produk simpan selamat emas tanpa sebarang pembiayaan tunai. Upah
+                                simpan dikenakan pada kadar tetap RM 0.60 bagi setiap RM100 nilai marhun.
+                                Tempoh simpanan maksimum ialah 12 bulan.
+                            </p>
+                        </div>
+
+                        <!-- Calculation Tabs Bar -->
+                        <div class="calc-tabs-bar" id="alsaleemCalcTabsBar"></div>
+
+                        <!-- Items Section -->
+                        <section class="form-section">
+                            <h2 class="section-title">💎 Barang Simpanan Al Saleem</h2>
+                            <div id="alsaleemItemsContainer">
+                                <!-- Populated by JS -->
+                            </div>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button class="btn btn-secondary btn-sm" onclick="addNewAlSaleemItemRow()">➕ Tambah
+                                    Barang</button>
+                                <button class="btn btn-outline btn-sm" onclick="resetAlSaleemCalculator()">🔄 Set
+                                    Semula</button>
+                            </div>
+                        </section>
+
+                        <!-- Duration Simulation Section -->
+                        <section class="form-section">
+                            <h2 class="section-title">📅 Simulasi Tempoh Simpanan & Tebus</h2>
+                            <div
+                                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+                                <div>
+                                    <label for="alsaleemStartDate">Tarikh Mula Simpan</label>
+                                    <input type="date" id="alsaleemStartDate" onchange="calculateAlSaleem()">
+                                </div>
+                                <div>
+                                    <label for="alsaleemEndDate">Tarikh Tebus</label>
+                                    <input type="date" id="alsaleemEndDate" onchange="calculateAlSaleem()">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Summary Column (Right - Sticky) -->
+                    <div class="summary-column">
+                        <div class="sticky-card">
+                            <h2 class="summary-title">📊 Rumusan Simpanan Al Saleem</h2>
+
+                            <!-- Initial prompt before calculation data is ready -->
+                            <div id="alsaleem-calc-prompt" class="calc-prompt">
+                                <div class="prompt-icon">ℹ️</div>
+                                <div>Sila pilih mutu emas dan masukkan berat segram untuk menjana rumusan simpanan
+                                    selamat.</div>
+                            </div>
+
+                            <!-- Result Content -->
+                            <div id="alsaleem-calc-results" class="calc-results" style="display: none;">
+                                <div id="alsaleemResultContent">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+
+                                <h3 class="card-title text-sm mb-2" style="margin-top: 16px;">📅 Simulasi Kadar Upah
+                                    Terkumpul</h3>
+                                <div id="alsaleemSimulationDetails" class="mb-4">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+
+                                <div class="card card-warning mt-4">
+                                    <p class="text-xs">
+                                        <strong>Peringatan Semakan Manual:</strong> Simulasi ini bagi tujuan pengiraan
+                                        upah simpan sahaja. Tetapi masih terdedah kepada ralat tidak dijangka.
+                                        Semak semula nilai upah simpan yang telah dijana.
+                                    </p>
+                                </div>
+
+                                <button class="btn btn-primary btn-block mt-4" onclick="showPrintWarning()">🖨️ Cetak
+                                    Simulasi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Chart & History -->
+            <div id="chart-view" class="view-panel">
+                <div class="card mb-4">
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h2 class="card-title mb-0">📈 Graf Perubahan Harga Emas (999 & 916)</h2>
+                            <p class="text-muted text-sm mt-1 mb-0">Menunjukkan trend pergerakan harga emas berdasarkan
+                                pangkalan data SQLite.</p>
+                        </div>
+                        <div>
+                            <select id="graphFilter" onchange="updateGraphData()" style="width:180px; padding:8px 12px; border-radius:8px; border: 1px solid var(--border-color); background-color: var(--bg-input); color: var(--text-main); font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23d4af37%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/></svg>'); background-repeat: no-repeat;
+                                background-position: right 12px center;">
+                                <option value="7" style="background-color:#232938; color:#f3f4f6;">7 Hari Terakhir
+                                </option>
+                                <option value="14" style="background-color:#232938; color:#f3f4f6;">14 Hari Terakhir
+                                </option>
+                                <option value="30" style="background-color:#232938; color:#f3f4f6;">1 Bulan Terakhir
+                                </option>
+                                <option value="60" style="background-color:#232938; color:#f3f4f6;">2 Bulan Terakhir
+                                </option>
+                                <option value="90" style="background-color:#232938; color:#f3f4f6;">3 Bulan Terakhir
+                                </option>
+                                <option value="180" style="background-color:#232938; color:#f3f4f6;">6 Bulan Terakhir
+                                </option>
+                                <option value="365" style="background-color:#232938; color:#f3f4f6;">1 Tahun Terakhir
+                                </option>
+                                <option value="730" style="background-color:#232938; color:#f3f4f6;">2 Tahun Terakhir
+                                </option>
+                                <option value="1825" style="background-color:#232938; color:#f3f4f6;">5 Tahun Terakhir
+                                </option>
+                                <option value="all" selected style="background-color:#232938; color:#f3f4f6;">Semua
+                                    Rekod</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="goldPriceChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">📅 Rekod Sejarah Harga Emas</h2>
+                    <div class="table-responsive">
+                        <table class="table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Tarikh</th>
+                                    <th>Mutu Emas</th>
+                                    <th>Harga Sejarah (RM/g)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-controls"
+                        style="display:flex; justify-content:space-between; align-items:center; margin-top: 16px; font-size: 14px;">
+                        <div>
+                            Paparkan:
+                            <select id="historyPageSize" onchange="changeHistoryPageSize()"
+                                style="padding:4px; border-radius:4px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main);">
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; gap: 8px; align-items:center;">
+                            <button class="btn btn-xs btn-outline" onclick="prevHistoryPage()">◀ Sebelumnya</button>
+                            <span id="historyPageInfo">Halaman 1 / 1</span>
+                            <button class="btn btn-xs btn-outline" onclick="nextHistoryPage()">Seterusnya ▶</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Manage Prices -->
+            <div id="manage-prices-view" class="view-panel">
+
+                <!-- Tab Buttons inside view -->
+                <div class="tab-sub-navigation mb-4" style="display: flex; gap: 10px;">
+                    <button class="btn btn-sm btn-primary" id="subtab-prices" onclick="switchSubTab('prices')">Harga
+                        Hari Ini</button>
+                    <button class="btn btn-sm btn-secondary" id="subtab-crud" onclick="switchSubTab('crud')">Log Sejarah
+                        Harga (CRUD)</button>
+                </div>
+
+                <!-- SUBVIEW 1: Kemaskini Cepat Harga Hari Ini -->
+                <div id="subview-prices-panel">
+                    <div class="card">
+                        <h2 class="card-title">💲 Kemaskini Harga Emas Semasa</h2>
+                        <p class="text-muted text-sm mb-4">Ubah harga emas jika perlu mengikut kadar semasa kaunter Ar
+                            Rahnu. Harga yang disimpan akan direkodkan di dalam SQLite dengan tarikh hari ini.</p>
+
+                        <div class="info-alert mb-4">
+                            <strong>💡 Makluman:</strong> Jika harga emas berubah, sila kemaskini harga emas semasa
+                            disini. Jika tiada perubahan, anda tidak perlu kemaskini. Sistem akan auto merujuk harga
+                            kali terakhir dikemaskini. Jika tersalah meletakkan harga emas, sila betulkan di Tab Log
+                            Sejarah Harga (CRUD).
+                        </div>
+
+                        <div class="gold-prices-editor-grid" id="goldPricesEditor">
+                            <!-- Populated by JS -->
+                        </div>
+
+                        <div class="actions-row mt-4">
+                            <button class="btn btn-primary" onclick="saveGoldPricesFromUI()">💾 Simpan Harga Hari
+                                Ini</button>
+                        </div>
+
+                        <div class="last-update-info mt-4 text-xs text-muted" id="lastUpdateText">
+                            Kemas kini terakhir: Tarikh --/--/----
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBVIEW 2: CRUD Sejarah Harga -->
+                <div id="subview-crud-panel" style="display: none;">
+
+                    <!-- CRUD Input Form -->
+                    <div class="card mb-4">
+                        <h2 class="card-title" id="crud-form-title">➕ Tambah / Kemas Kini Rekod Sejarah</h2>
+
+                        <div
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                            <div>
+                                <label for="crud-date">Tarikh Rekod</label>
+                                <input type="date" id="crud-date">
+                            </div>
+                            <div>
+                                <label for="crud-grade">Mutu Emas</label>
+                                <select id="crud-grade">
+                                    <!-- Options filled dynamically -->
+                                </select>
+                            </div>
+                            <div>
+                                <label for="crud-price">Harga Emas (RM/g)</label>
+                                <div class="editor-input-group" style="height: 42px;">
+                                    <span
+                                        style="padding-left:12px; font-weight:600; color:var(--text-muted); line-height:42px;">RM</span>
+                                    <input type="number" step="0.01" id="crud-price" placeholder="0.00"
+                                        style="border:none; background:transparent; padding:10px 12px; color:var(--text-main); font-weight:600; outline:none; width:100%; text-align:right;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="actions-row mt-4">
+                            <button class="btn btn-primary" id="btn-save-crud" onclick="saveCrudRecord()">💾 Simpan
+                                Rekod</button>
+                            <button class="btn btn-outline" id="btn-cancel-crud" onclick="clearCrudForm()"
+                                style="display: none;">Batal</button>
+                        </div>
+                    </div>
+
+                    <!-- CRUD History Table -->
+                    <div class="card">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                            <h2 class="card-title mb-0">📅 Log Sejarah Pangkalan Data</h2>
+                            <div style="display:flex; gap: 8px;">
+                                <button class="btn btn-sm btn-outline" onclick="exportCsvDialog()">📥 Eksport
+                                    CSV</button>
+                                <button class="btn btn-sm btn-outline" onclick="importCsvDialog()">📤 Import
+                                    CSV</button>
+                                <button class="btn btn-sm btn-danger-outline" onclick="clearAllPricesConfirm()">🗑️
+                                    Kosongkan Data</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tarikh</th>
+                                        <th>Mutu Emas</th>
+                                        <th>Harga (RM/g)</th>
+                                        <th style="width: 150px; text-align: center;">Tindakan</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="crudTableBody">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination-controls"
+                            style="display:flex; justify-content:space-between; align-items:center; margin-top: 16px; font-size: 14px;">
+                            <div>
+                                Paparkan:
+                                <select id="crudPageSize" onchange="changeCrudPageSize()"
+                                    style="padding:4px; border-radius:4px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main);">
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div style="display:flex; gap: 8px; align-items:center;">
+                                <button class="btn btn-xs btn-outline" onclick="prevCrudPage()">◀ Sebelumnya</button>
+                                <span id="crudPageInfo">Halaman 1 / 1</span>
+                                <button class="btn btn-xs btn-outline" onclick="nextCrudPage()">Seterusnya ▶</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- VIEW: Guide -->
+            <div id="guide-view" class="view-panel">
+                <div class="card mb-4">
+                    <h2 class="card-title">📦 Spesifikasi Produk Ar Rahnu</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nama Produk</th>
+                                    <th>Margin (%)</th>
+                                    <th>Tempoh Asas (Bulan)</th>
+                                    <th>Lanjutan (Bulan)</th>
+                                    <th>Kadar Upah Simpan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Prestij</strong></td>
+                                    <td>70%</td>
+                                    <td>6 Bulan</td>
+                                    <td>4 Bulan (2+2)</td>
+                                    <td>RM 0.90 / RM100 marhun sebulan</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Didik</strong></td>
+                                    <td>75%</td>
+                                    <td>6 Bulan</td>
+                                    <td>4 Bulan (2+2)</td>
+                                    <td>RM 0.85 / RM100 marhun sebulan</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bisnes</strong></td>
+                                    <td>80%</td>
+                                    <td>6 Bulan</td>
+                                    <td>4 Bulan (2+2)</td>
+                                    <td>RM 1.00 / RM100 marhun sebulan</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Biznita</strong></td>
+                                    <td>80%</td>
+                                    <td>6 Bulan</td>
+                                    <td>4 Bulan (2+2)</td>
+                                    <td>RM 0.95 / RM100 marhun sebulan</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Emas</strong></td>
+                                    <td>80%</td>
+                                    <td>6 Bulan</td>
+                                    <td>4 Bulan (2+2)</td>
+                                    <td>RM 0.90 / RM100 marhun sebulan</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Care</strong></td>
+                                    <td>80%</td>
+                                    <td>6 Bulan</td>
+                                    <td>Tiada Lanjutan</td>
+                                    <td>RM 0.75 / RM100 marhun sebulan</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>eKASIH (Kadar Khas)</strong></td>
+                                    <td>70%</td>
+                                    <td>10 Bulan</td>
+                                    <td>Tiada Lanjutan</td>
+                                    <td>RM 0.10 / RM100 marhun sebulan</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <h2 class="card-title">💲 Spesifikasi Belian Balik Emas</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mutu Emas</th>
+                                    <th>Kadar Belian Balik ( Daripada Harga Semasa )</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>999</strong></td>
+                                    <td>84%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>950</strong></td>
+                                    <td>84%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>916</strong></td>
+                                    <td>83%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>875</strong></td>
+                                    <td>82%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>835</strong></td>
+                                    <td>80%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>750</strong></td>
+                                    <td>82%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>700 WG (White Gold)</strong></td>
+                                    <td>65%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>750 WG (White Gold)</strong></td>
+                                    <td>65%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">💡 Logik Pengiraan Utama</h2>
+                    <div class="guide-logics text-sm">
+                        <p class="mb-2"><strong>1. Nilai Marhun (Valuation)</strong></p>
+                        <p class="text-muted mb-4">Nilai Marhun = Berat Barang (g) &times; Harga Emas Semasa (RM/g).
+                            Diambil mengikut mutu emas yang sepadan.</p>
+
+                        <p class="mb-2"><strong>2. Jumlah Pembiayaan Baru</strong></p>
+                        <p class="text-muted mb-4">Pembiayaan = Jumlah Marhun &times; Margin Pembiayaan Produk. Nilai
+                            ini <strong>dibundarkan ke bawah (floor) kepada Ringgit terdekat (sen dibuang)</strong>.</p>
+
+                        <p class="mb-2"><strong>3. Upah Simpan Sehari & Awal 60 Hari</strong></p>
+                        <p class="text-muted mb-4">
+                            Kadar Upah Simpan Harian = (Jumlah Marhun &times; (Kadar Bulanan / 100) &times; 12) / 365.
+                            Dibundarkan kepada 2 tempat perpuluhan.<br>
+                            Upah Simpan Awal 60 Hari = Kadar Harian &times; 60 hari. Nilai ini dipotong terus daripada
+                            pembiayaan baru yang dilepaskan kepada pelanggan.
+                        </p>
+                        <p class="mb-2"><strong>4. Perlindungan Takaful I-Protect</strong></p>
+                        <p class="text-muted mb-4">
+                            - <strong>I-Protect 1.0:</strong> RM 1.25 bagi setiap gandaan RM1,000 Nilai Marhun (dibundar
+                            ke atas).<br>
+                            - <strong>I-Protect 2.0:</strong> RM 2.50 bagi setiap gandaan RM1,000 Nilai Marhun (dibundar
+                            ke atas) + Caj Transaksi RM 1.50.
+                        </p>
+                        <p class="mb-2"><strong>5. Transaksi Belian Balik Emas (Trade-in / Purchase)</strong></p>
+                        <p class="text-muted mb-4">
+                            - **Harga Belian Per Gram**: Harga Emas Semasa &times; Kadar Belian Balik (%). Cth: Harga
+                            916 segram RM300, Harga Belian = RM300 &times; 83% = RM249/g.<br>
+                            - **Nilai Marhun**: Berat (g) &times; Harga Emas Semasa.<br>
+                            - **Nilai Belian (Payout)**: Berat (g) &times; Harga Belian Per Gram.
+                        </p>
+                        <p class="mb-2"><strong>6. Simpanan Selamat Al Saleem</strong></p>
+                        <p class="text-muted">
+                            - Skim simpanan selamat barang kemas sahaja tanpa pembiayaan tunai. Dikenakan upah simpan
+                            kadar rata RM 0.60 bagi setiap RM100 Nilai Marhun sebulan.<br>
+                            - Upah Simpan Harian: Nilai Marhun &times; (0.60 / 100) &times; 12 / 365 (dibundarkan
+                            kepada 2 tempat perpuluhan terdekat).<br>
+                            - Tempoh Simpanan Terkumpul: Upah simpan dikira berasaskan hari inklusif (bermula hari
+                            pertama sehingga hari tebus). Jumlah upah terkumpul = Upah Simpan Harian &times; Bilangan
+                            Hari Simpanan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Tentang -->
+            <div id="about-view" class="view-panel">
+                <div class="card mb-4"
+                    style="max-width: 650px; margin: 30px auto; padding: 40px; border-radius: var(--radius); border: 1px solid var(--border-color); background-color: var(--bg-card); box-shadow: var(--shadow);">
+
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div class="brand-logo"
+                            style="width: 75px; height: 75px; margin: 0 auto 18px; border-radius: 16px; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.2); display: flex; align-items: center; justify-content: center;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                style="color:var(--primary-color)">
+                                <path d="m16 16 3-8 3 8c-.1.3-.3.5-.6.5h-4.8c-.3 0-.5-.2-.6-.5Z" />
+                                <path d="m2 16 3-8 3 8c-.1.3-.3.5-.6.5H2.6c-.3 0-.5-.2-.6-.5Z" />
+                                <path d="M7 21h10" />
+                                <path d="M12 3v18" />
+                                <path d="M3 7h18" />
+                            </svg>
+                        </div>
+                        <h2
+                            style="font-size: 1.8rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main); font-family: 'Outfit', sans-serif;">
+                            Kalkulator Ar Rahnu V2</h2>
+                        <p class="text-muted text-sm" style="font-size: 0.9rem;">Sistem Simulasi Desktop & Pengurusan
+                            Harga Emas</p>
+                    </div>
+
+                    <!-- App Intro -->
+                    <div
+                        style="font-size: 0.95rem; color: var(--text-main); line-height: 1.7; text-align: justify; margin-bottom: 24px;">
+                        <p class="mb-3">
+                            <strong>Kalkulator Ar Rahnu V2</strong> merupakan aplikasi desktop yang
+                            dibangunkan khas untuk kegunaan dalaman bagi memudahkan simulasi pengiraan
+                            transaksi gadaian Ar Rahnu secara pantas, tepat, dan selamat.
+                        </p>
+                        <p>
+                            Sistem ini beroperasi secara 100% luar talian (offline) untuk melindungi kerahsiaan data
+                            operasi, disokong oleh pangkalan data SQLite tempatan (Local Storage) untuk
+                            merekod harga emas selain memberi kuasa kepada pengguna kemaskini harga emas dan memberi
+                            kemudahan kepada pengguna.
+                        </p>
+                    </div>
+
+                    <!-- Features List -->
+                    <div
+                        style="text-align: left; background-color: var(--bg-input); padding: 20px 24px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 24px;">
+                        <h4
+                            style="color: var(--primary-color); font-weight: 700; margin-bottom: 12px; font-size: 0.95rem;">
+                            Ciri-Ciri Utama Sistem:</h4>
+                        <ul
+                            style="list-style-type: none; padding-left: 0; font-size: 0.85rem; color: var(--text-main); line-height: 1.8;">
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px;">
+                                <span style="color: var(--primary-color);">✔</span>
+                                <span><b>Simulasi Multi-Mod Pintar:</b> Pengiraan serentak gadaian Ar Rahnu, belian
+                                    emas, dan simpanan selamat Al Saleem dengan sokongan multi-tab
+                                    selari.</span>
+                            </li>
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px;">
+                                <span style="color: var(--primary-color);">✔</span>
+                                <span><b>Analisis Graf & Sejarah:</b> Visualisasi trend turun-naik harga emas
+                                    berasaskan carta Chart.js interaktif.</span>
+                            </li>
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px;">
+                                <span style="color: var(--primary-color);">✔</span>
+                                <span><b>Pengurusan Pangkalan Data:</b> Sistem tambah/sunting/padam rekod sejarah (CRUD)
+                                    dan fungsi kosongkan data secara total.</span>
+                            </li>
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px;">
+                                <span style="color: var(--primary-color);">✔</span>
+                                <span><b>Sistem Backup CSV:</b> Eksport dan import fail pangkalan data dalam format CSV
+                                    bagi memudahkan migrasi data antara komputer cawangan.</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px;">
+                                <span style="color: var(--primary-color);">✔</span>
+                                <span><b>Draf Cetakan Simulasi:</b> Cetakan slip simulasi berformat kemas untuk kegunaan
+                                    penerangan pelanggan kaunter.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Info Kemas Kini (Disembunyikan secara lalai) -->
+                    <div id="update-alert-card" style="display: none; background-color: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; animation: fadeIn 0.35s ease-out;">
+                        <h4 style="color: var(--primary-color); font-weight: 700; margin-bottom: 8px; font-size: 1.05rem;">🚀 Kemas Kini Baharu Tersedia (Versi <span id="new-version-text">1.1.0</span>)!</h4>
+                        <p class="text-muted text-sm mb-4" id="new-version-notes">Peningkatan prestasi pengiraan dan pembetulan pepijat.</p>
+                        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                            <button class="btn btn-primary btn-sm" id="downloadGithubBtn" style="padding: 8px 16px; font-size: 0.8rem;">
+                                🌐 Muat Turun dari GitHub
+                            </button>
+                            <button class="btn btn-outline btn-sm" id="downloadDriveBtn" style="padding: 8px 16px; font-size: 0.8rem; border-color: var(--primary-color); color: var(--primary-color);">
+                                📂 Muat Turun dari Google Drive
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Footer / Credits / Feedback -->
+                    <div style="border-top: 1px solid var(--border-color); padding-top: 24px; text-align: center;">
+                        <p class="text-sm mb-4" style="color: var(--text-muted); line-height: 1.5; font-size: 0.85rem;">
+                            Jika anda mempunyai sebarang cadangan ciri baharu, penambahbaikan UI/UX, atau ingin
+                            melaporkan isu pepijat (bugs), sila gunakan butang maklum balas di bawah untuk menghantar
+                            laporan terus kepada pembangun.
+                        </p>
+
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                            <button class="btn btn-primary" onclick="openFeedbackForm()"
+                                style="padding: 12px 24px; font-size: 0.9rem;">
+                                💬 Hantar Maklum Balas / Laporkan Bugs
+                            </button>
+                            <div style="margin-top: 8px; font-size: 0.8rem; color: var(--text-muted);">
+                                Versi Aplikasi: <b>1.0 (Stabil)</b> | Dibangunkan oleh <b>zuwan aufa</b> dengan bantuan
+                                AI sepenuhnya.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Alert Modal Dialog -->
+    <div id="customAlertModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon" id="customAlertIcon">⚠️</div>
+            <div class="modal-message" id="customAlertMessage">Mesej amaran dipaparkan di sini.</div>
+            <div id="customAlertActions" style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
+                <button class="btn btn-primary" id="customAlertOkBtn" onclick="closeCustomAlert()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal Dialog -->
+    <div id="customConfirmModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon" id="customConfirmIcon">❓</div>
+            <div class="modal-message" id="customConfirmMessage">Adakah anda pasti?</div>
+            <div id="customConfirmActions" style="margin-top: 20px; display: flex; justify-content: center; gap: 12px;">
+                <button class="btn btn-primary" id="customConfirmYesBtn">Ya, Teruskan</button>
+                <button class="btn btn-outline" id="customConfirmNoBtn">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export CSV Modal -->
+    <div id="exportCsvModal" class="modal-overlay">
+        <div class="modal-box" style="max-width: 400px;">
+            <div class="modal-icon">📥</div>
+            <h3 style="margin-bottom: 15px;">Eksport Data Sejarah Harga Emas</h3>
+            <div style="margin-bottom: 20px; text-align: left;">
+                <label style="display: block; margin-bottom: 8px;">Dari Tahun:</label>
+                <input type="number" id="exportStartYear" value="2020" class="form-control"
+                    style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
+
+                <label style="display: block; margin-top: 15px; margin-bottom: 8px;">Hingga Tahun:</label>
+                <input type="number" id="exportEndYear" value="2026" class="form-control"
+                    style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
+            </div>
+            <div class="actions-row" style="justify-content: center; gap: 12px;">
+                <button class="btn btn-primary" onclick="executeExportCsv()">Muat Turun CSV</button>
+                <button class="btn btn-outline" onclick="closeExportCsvModal()">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Warning Modal -->
+    <div id="printWarningModal" class="modal-overlay">
+        <div class="modal-box" style="max-width: 500px; text-align: left;">
+            <div class="modal-icon" style="text-align: center; font-size: 2.5rem; margin-bottom: 10px;">⚠️</div>
+            <h3 style="margin-bottom: 15px; text-align: center; color: var(--primary-color);">Draf Cetakan Simulasi</h3>
+            <p class="text-sm mb-4" style="line-height: 1.6; color: var(--text-main);">
+                <strong>AMARAN PENTING:</strong><br>
+                Fungsi cetakan simulasi ini direka khusus untuk tujuan penerangan dan simulasi pengiraan kepada
+                pelanggan sahaja.
+                Dokumen ini <strong>BUKAN merupakan slip atau resit rasmi transaksi</strong> dan TIDAK DIBENARKAN
+                diserah atau digunakan sebagai dokumen sah transaksi pejabat.
+            </p>
+            <p class="text-sm font-semibold mb-4" style="text-align: center; color: var(--primary-color);">
+                Adakah anda ingin meneruskan cetakan simulasi?
+            </p>
+            <div class="actions-row" style="justify-content: center; gap: 12px;">
+                <button class="btn btn-primary" onclick="triggerPrint()">✅ Ya, Cetak Sekarang</button>
+                <button class="btn btn-outline" onclick="closePrintWarning()">❌ Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offline libraries -->
+    <script src="lib/chart.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
