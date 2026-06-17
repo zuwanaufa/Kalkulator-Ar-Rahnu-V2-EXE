@@ -77,7 +77,7 @@ window.handleDeficitCashInput = handleDeficitCashInput;
 window.showPrintWarning = () => {
     const isPurchase = document.getElementById('purchase-calculator-view').classList.contains('active');
     const isAlSaleem = document.getElementById('alsaleem-calculator-view').classList.contains('active');
-    
+
     if (isAlSaleem) {
         const startDateInput = document.getElementById('alsaleemStartDate');
         const endDateInput = document.getElementById('alsaleemEndDate');
@@ -87,8 +87,8 @@ window.showPrintWarning = () => {
         }
         const start = new Date(startDateInput.value);
         const end = new Date(endDateInput.value);
-        start.setHours(0,0,0,0);
-        end.setHours(0,0,0,0);
+        start.setHours(0, 0, 0, 0);
+        end.setHours(0, 0, 0, 0);
         if (end < start) {
             showAlert('Tarikh Tebus tidak boleh mendahului Tarikh Mula Simpan.');
             return;
@@ -216,14 +216,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function checkAppUpdates() {
     const CURRENT_VERSION = '1.0';
     // Sila kemaskini URL ini dengan akaun GitHub dan repositori sebenar anda nanti
-    const UPDATE_URL = 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/version.json';
-    
+    const UPDATE_URL = 'https://raw.githubusercontent.com/zuwanaufa/Kalkulator-Ar-Rahnu-V2-EXE/refs/heads/main/version.json';
+
     try {
         const response = await fetch(UPDATE_URL);
         if (!response.ok) return; // Gagal secara senyap jika offline atau file tidak ditemui
-        
+
         const data = await response.json();
-        
+
         if (data.version && data.version !== CURRENT_VERSION) {
             const updateDot = document.getElementById('update-dot');
             const updateAlertCard = document.getElementById('update-alert-card');
@@ -231,14 +231,14 @@ async function checkAppUpdates() {
             const newVersionNotes = document.getElementById('new-version-notes');
             const downloadGithubBtn = document.getElementById('downloadGithubBtn');
             const downloadDriveBtn = document.getElementById('downloadDriveBtn');
-            
+
             if (updateDot) updateDot.style.display = 'inline-block';
             if (updateAlertCard) updateAlertCard.style.display = 'block';
             if (newVersionText) newVersionText.textContent = data.version;
             if (newVersionNotes && data.releaseNotes) {
                 newVersionNotes.textContent = data.releaseNotes;
             }
-            
+
             if (downloadGithubBtn && data.githubUrl) {
                 downloadGithubBtn.onclick = () => window.api.openExternal(data.githubUrl);
             }
