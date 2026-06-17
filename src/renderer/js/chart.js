@@ -26,7 +26,7 @@ export function updateGraphData() {
     const ctx = canvas.getContext('2d');
     
     const filterSelect = document.getElementById('graphFilter');
-    const filterDays = filterSelect ? filterSelect.value : 'all';
+    const filterDays = filterSelect ? filterSelect.value : '7';
     
     // Group data by date
     const historyMap = {};
