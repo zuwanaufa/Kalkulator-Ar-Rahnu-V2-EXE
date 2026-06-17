@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com;">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com;">
     <title>Kalkulator Ar Rahnu V2</title>
     <link href="fonts/outfit.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
@@ -101,7 +102,8 @@
                         </svg></span>
                     <span class="menu-label">
                         Tentang
-                        <span id="update-dot" style="display: none; width: 8px; height: 8px; background-color: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger); margin-left: 8px;"></span>
+                        <span id="update-dot"
+                            style="display: none; width: 8px; height: 8px; background-color: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger); margin-left: 8px;"></span>
                     </span>
                 </a>
             </nav>
@@ -539,7 +541,8 @@
                         <div>
                             <select id="graphFilter" onchange="updateGraphData()" style="width:180px; padding:8px 12px; border-radius:8px; border: 1px solid var(--border-color); background-color: var(--bg-input); color: var(--text-main); font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23d4af37%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/></svg>'); background-repeat: no-repeat;
                                 background-position: right 12px center;">
-                                <option value="7" selected style="background-color:#232938; color:#f3f4f6;">7 Hari Terakhir
+                                <option value="7" selected style="background-color:#232938; color:#f3f4f6;">7 Hari
+                                    Terakhir
                                 </option>
                                 <option value="14" style="background-color:#232938; color:#f3f4f6;">14 Hari Terakhir
                                 </option>
@@ -622,10 +625,10 @@
                             Rahnu. Harga yang disimpan akan direkodkan di dalam SQLite dengan tarikh hari ini.</p>
 
                         <div class="info-alert mb-4">
-                            <strong>💡 Makluman:</strong> Jika harga emas berubah, sila kemaskini harga emas semasa
-                            disini. Jika tiada perubahan, anda tidak perlu kemaskini. Sistem akan auto merujuk harga
-                            kali terakhir dikemaskini. Jika tersalah meletakkan harga emas, sila betulkan di Tab Log
-                            Sejarah Harga (CRUD).
+                            <strong>💡 Makluman:</strong> Sila kemas kini harga emas semasa di sini sekiranya terdapat
+                            perubahan. Jika tiada sebarang perubahan, tindakan kemas kini tidak diperlukan kerana sistem
+                            akan merujuk kepada harga terakhir yang direkodkan secara automatik. Sekiranya berlaku
+                            kesilapan input, pembetulan boleh dilakukan menerusi Tab Log Sejarah Harga (CRUD).
                         </div>
 
                         <div class="gold-prices-editor-grid" id="goldPricesEditor">
@@ -877,10 +880,10 @@
                         </p>
                         <p class="mb-2"><strong>5. Transaksi Belian Balik Emas (Trade-in / Purchase)</strong></p>
                         <p class="text-muted mb-4">
-                            - **Harga Belian Per Gram**: Harga Emas Semasa &times; Kadar Belian Balik (%). Cth: Harga
+                            - Harga Belian Per Gram: Harga Emas Semasa &times; Kadar Belian Balik (%). Cth: Harga
                             916 segram RM300, Harga Belian = RM300 &times; 83% = RM249/g.<br>
-                            - **Nilai Marhun**: Berat (g) &times; Harga Emas Semasa.<br>
-                            - **Nilai Belian (Payout)**: Berat (g) &times; Harga Belian Per Gram.
+                            - Nilai Marhun: Berat (g) &times; Harga Emas Semasa.<br>
+                            - Nilai Belian (Payout): Berat (g) &times; Harga Belian Per Gram.
                         </p>
                         <p class="mb-2"><strong>6. Simpanan Selamat Al Saleem</strong></p>
                         <p class="text-muted">
@@ -976,14 +979,20 @@
                     </div>
 
                     <!-- Info Kemas Kini (Disembunyikan secara lalai) -->
-                    <div id="update-alert-card" style="display: none; background-color: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; animation: fadeIn 0.35s ease-out;">
-                        <h4 style="color: var(--primary-color); font-weight: 700; margin-bottom: 8px; font-size: 1.05rem;">🚀 Kemas Kini Baharu Tersedia (Versi <span id="new-version-text">1.1.0</span>)!</h4>
-                        <p class="text-muted text-sm mb-4" id="new-version-notes">Peningkatan prestasi pengiraan dan pembetulan pepijat.</p>
+                    <div id="update-alert-card"
+                        style="display: none; background-color: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; animation: fadeIn 0.35s ease-out;">
+                        <h4
+                            style="color: var(--primary-color); font-weight: 700; margin-bottom: 8px; font-size: 1.05rem;">
+                            🚀 Kemas Kini Baharu Tersedia (Versi <span id="new-version-text">1.1.0</span>)!</h4>
+                        <p class="text-muted text-sm mb-4" id="new-version-notes">Peningkatan prestasi pengiraan dan
+                            pembetulan pepijat.</p>
                         <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                            <button class="btn btn-primary btn-sm" id="downloadGithubBtn" style="padding: 8px 16px; font-size: 0.8rem;">
+                            <button class="btn btn-primary btn-sm" id="downloadGithubBtn"
+                                style="padding: 8px 16px; font-size: 0.8rem;">
                                 🌐 Muat Turun dari GitHub
                             </button>
-                            <button class="btn btn-outline btn-sm" id="downloadDriveBtn" style="padding: 8px 16px; font-size: 0.8rem; border-color: var(--primary-color); color: var(--primary-color);">
+                            <button class="btn btn-outline btn-sm" id="downloadDriveBtn"
+                                style="padding: 8px 16px; font-size: 0.8rem; border-color: var(--primary-color); color: var(--primary-color);">
                                 📂 Muat Turun dari Google Drive
                             </button>
                         </div>
