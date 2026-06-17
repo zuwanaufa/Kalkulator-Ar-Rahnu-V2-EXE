@@ -14,6 +14,7 @@ function createMainWindow() {
         minWidth: 1000,
         minHeight: 700,
         title: "Kalkulator Ar Rahnu V2",
+        icon: path.join(__dirname, '../renderer/assets/icon.ico'),
         webPreferences: {
             preload: path.join(__dirname, '../preload.js'),
             contextIsolation: true,
@@ -172,6 +173,7 @@ ipcMain.on('print:simulation', (event, printData) => {
         parent: mainWindow,
         modal: true,
         title: "Cetak Simulasi Ar Rahnu",
+        icon: path.join(__dirname, '../renderer/assets/icon.ico'),
         webPreferences: {
             preload: path.join(__dirname, '../preload.js'),
             contextIsolation: true,
