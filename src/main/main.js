@@ -27,6 +27,10 @@ function createMainWindow() {
 
     mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 
+    mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+        console.log(`[RENDERER CONSOLE] ${message} (Line ${line} in ${path.basename(sourceId)})`);
+    });
+
     mainWindow.on('closed', () => {
         mainWindow = null;
         if (printWindow) {
