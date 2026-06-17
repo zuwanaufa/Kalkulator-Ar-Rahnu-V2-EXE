@@ -47,3 +47,8 @@ tmp/
 temp/
 .sass-cache/
 .eslintcache
+
+# Local AI / Doc files
+PRD.md
+memory.md
+
