@@ -23,6 +23,7 @@ Anda **TIDAK PERLU** memasang sebarang perisian sokongan atau melakukan persedia
 1.  **📊 Kalkulator Ar Rahnu Utama (Real-Time)**
     *   Pengiraan automatik Nilai Marhun, Nilai Pembiayaan, dan Upah Simpan berdasarkan skim produk pilihan (Prestij, Didik, Bisnes, Biznita, Emas, Care, atau eKASIH).
     *   Menyokong penambahan berbilang barang kemas serentak.
+    *   Fungsi **Tukar Surat (Gadai Semula)**: Suis toggle khusus untuk mengira transaksi gadaian semula secara automatik berasaskan had pembiayaan lama, caj pertukaran surat RM 10.00, serta pengesahan medan wajib (Jumlah Tebus Surat Lama dan Pembiayaan Surat Lama).
     *   Logik potongan automatik seperti **Upah Simpan Awal (60 hari)**, perlindungan **Takaful I-Protect (1.0 / 2.0)**, yuran ahli baharu, caj kehilangan surat gadaian lama (SAG), dan caj cuci/uji emas.
     *   Pengiraan **Jadual Bayaran Balik Berfasa** secara automatik (Fasa 1 & Fasa 2).
     *   Sistem pengiraan **Baki Wang** jika berlaku keadaan pembiayaan defisit (potongan melebihi nilai pembiayaan).

@@ -1,11 +1,11 @@
 // --- Configuration & Utility Module ---
 
 export const products = [
-    { id: 'prestij', name: 'Prestij', margin: 70, tenure: 6, rate: 0.90, canExtend: true },
-    { id: 'didik', name: 'Didik', margin: 75, tenure: 6, rate: 0.85, canExtend: true },
-    { id: 'bisnes', name: 'Bisnes', margin: 80, tenure: 6, rate: 1.00, canExtend: true },
-    { id: 'biznita', name: 'Biznita', margin: 80, tenure: 6, rate: 0.95, canExtend: true },
-    { id: 'emas', name: 'Emas', margin: 80, tenure: 6, rate: 0.90, canExtend: true },
+    { id: 'prestij', name: 'Prestij', margin: 70, tenure: 6, extendTenure: 6, rate: 0.90, canExtend: true },
+    { id: 'didik', name: 'Didik', margin: 75, tenure: 6, extendTenure: 6, rate: 0.85, canExtend: true },
+    { id: 'bisnes', name: 'Bisnes', margin: 80, tenure: 6, rate: 1.00, canExtend: false },
+    { id: 'biznita', name: 'Biznita', margin: 80, tenure: 6, rate: 0.95, canExtend: false },
+    { id: 'emas', name: 'Emas', margin: 80, tenure: 6, rate: 0.90, canExtend: false },
     { id: 'care', name: 'Care', margin: 80, tenure: 6, rate: 0.75, canExtend: false },
     { id: 'ekasih', name: 'eKASIH (Kadar Khas)', margin: 70, tenure: 10, rate: 0.10, isDaily: false, canExtend: false }
 ];
@@ -131,6 +131,10 @@ export function getDefaultTabState(id, name) {
         ujiEmasVal: '',
         others: [],
         customFinancingVal: '',
-        cashPaidVal: ''
+        cashPaidVal: '',
+        tukarSurat: false,
+        tukarSuratRef: '',
+        tukarSuratTebus: '',
+        tukarSuratPembiayaan: ''
     };
 }

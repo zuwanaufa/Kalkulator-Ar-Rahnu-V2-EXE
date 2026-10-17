@@ -39,7 +39,8 @@ import {
     triggerPrint as arRahnuTriggerPrint,
     setupCalculationListeners,
     initTabs,
-    resetCalculator
+    resetCalculator,
+    handleTukarSuratToggle
 } from './calculator.js';
 import {
     initPurchaseTabs,
@@ -74,6 +75,7 @@ window.handleIProtectChange = handleIProtectChange;
 window.calculateAll = calculateAll;
 window.sanitizeFinancingInput = sanitizeFinancingInput;
 window.handleDeficitCashInput = handleDeficitCashInput;
+window.handleTukarSuratToggle = handleTukarSuratToggle;
 window.showPrintWarning = () => {
     const isPurchase = document.getElementById('purchase-calculator-view').classList.contains('active');
     const isAlSaleem = document.getElementById('alsaleem-calculator-view').classList.contains('active');
@@ -214,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // --- Semi-Automatic Update Check Logic ---
 async function checkAppUpdates() {
-    const CURRENT_VERSION = '1.0';
+    const CURRENT_VERSION = '2.0';
     // Sila kemaskini URL ini dengan akaun GitHub dan repositori sebenar anda nanti
     const UPDATE_URL = 'https://raw.githubusercontent.com/zuwanaufa/Kalkulator-Ar-Rahnu-V2-EXE/refs/heads/main/version.json';
 
@@ -225,14 +227,12 @@ async function checkAppUpdates() {
         const data = await response.json();
 
         if (data.version && data.version !== CURRENT_VERSION) {
-            const updateDot = document.getElementById('update-dot');
             const updateAlertCard = document.getElementById('update-alert-card');
             const newVersionText = document.getElementById('new-version-text');
             const newVersionNotes = document.getElementById('new-version-notes');
             const downloadGithubBtn = document.getElementById('downloadGithubBtn');
             const downloadDriveBtn = document.getElementById('downloadDriveBtn');
 
-            if (updateDot) updateDot.style.display = 'inline-block';
             if (updateAlertCard) updateAlertCard.style.display = 'block';
             if (newVersionText) newVersionText.textContent = data.version;
             if (newVersionNotes && data.releaseNotes) {

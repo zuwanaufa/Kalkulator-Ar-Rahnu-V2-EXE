@@ -722,7 +722,11 @@
                 }
 
                 // Populate Header
-                document.getElementById('productLabel').textContent = `PRODUK: ${data.productName.toUpperCase()}`;
+                if (data.isTukarSurat) {
+                    document.getElementById('productLabel').textContent = `PRODUK: ${data.productName.toUpperCase()} (TUKAR SURAT / GADAI SEMULA)`;
+                } else {
+                    document.getElementById('productLabel').textContent = `PRODUK: ${data.productName.toUpperCase()}`;
+                }
                 document.getElementById('dateLabel').textContent = `Tarikh: ${formatDate(data.pawnDate)}`;
 
                 // Populate Items Table
@@ -747,8 +751,14 @@
 
                 rows.push(['Nilai Marhun Keseluruhan', formatCur(data.totalMarhun)]);
 
-                const customPercent = data.totalMarhun > 0 ? ((data.financingAmount / data.totalMarhun) * 100).toFixed(1) : data.selectedProduct.margin;
-                rows.push([`Pembiayaan (${customPercent}%)`, `<b>${formatCur(data.financingAmount)}</b>`]);
+                if (data.isTukarSurat) {
+                    rows.push(['Pembiayaan Surat Lama (Digunakan)', `<b>${formatCur(data.financingAmount)}</b>`]);
+                    rows.push(['Caj Tukar Surat', `<span class="text-red">-${formatCur(data.cajTukarSurat)}</span>`]);
+                    rows.push([`Tebus Surat Lama (Tukar Surat${data.tukarSuratRef ? ' - ' + data.tukarSuratRef : ''})`, `<span class="text-red">-${formatCur(data.tukarSuratTebus)}</span>`]);
+                } else {
+                    const customPercent = data.totalMarhun > 0 ? ((data.financingAmount / data.totalMarhun) * 100).toFixed(1) : data.selectedProduct.margin;
+                    rows.push([`Pembiayaan (${customPercent}%)`, `<b>${formatCur(data.financingAmount)}</b>`]);
+                }
 
                 if (data.belianEmas > 0) {
                     rows.push(['Belian Emas (Tunai)', `<span class="text-green">+${formatCur(data.belianEmas)}</span>`]);
@@ -836,13 +846,15 @@
                 const basicTenure = data.selectedProduct.tenure;
                 const basicDays = basicTenure * 30;
                 const dateBasicExpiryStr = formatDate(data.dateBasicExpiry);
-                const upahExtended = data.dailyRate * 120;
+                const extendedMonths = (data.selectedProduct && data.selectedProduct.extendTenure) ? data.selectedProduct.extendTenure : 6;
+                const totalMonths = basicTenure + extendedMonths;
+                const upahExtended = data.dailyRate * (extendedMonths * 30);
                 const totalRedeemExtended = data.financingAmount + upahExtended;
 
                 let schedHtml = '';
                 if (data.selectedProduct.canExtend) {
                     const dateExtendedExpiry = new Date(data.pawnDate);
-                    dateExtendedExpiry.setMonth(dateExtendedExpiry.getMonth() + 10);
+                    dateExtendedExpiry.setMonth(dateExtendedExpiry.getMonth() + totalMonths);
                     const dateExtendedExpiryStr = formatDate(dateExtendedExpiry);
 
                     schedHtml = `
@@ -856,24 +868,24 @@
                         <tr class="total-row-highlight"><td>Anggaran Tebus Bulan ke-6:</td><td align="right">${formatCur(data.totalRedeemBasic)}</td></tr>
                         <tr style="font-style: italic; font-size: 9.5px; color: #555;">
                             <td colspan="2">
-                                <b>Ansuran bulanan tebus: ${formatCur(data.totalRedeemBasic / 6)} / sebulan (selama 6 bulan).</b><br>
-                                *Nota Pengiraan Ansuran: (Pokok RM ${data.financingAmount.toFixed(2)} + Baki Upah Asas RM ${data.upahBasicBal.toFixed(2)}) / 6 bulan.
+                                <b>Ansuran bulanan tebus: ${formatCur(data.totalRedeemBasic / basicTenure)} / sebulan (selama ${basicTenure} bulan).</b><br>
+                                *Nota Pengiraan Ansuran: (Pokok RM ${data.financingAmount.toFixed(2)} + Baki Upah Asas RM ${data.upahBasicBal.toFixed(2)}) / ${basicTenure} bulan.
                             </td>
                         </tr>
                         
-                        <tr class="group-header"><td colspan="2">Fasa 2: Tempoh Lanjutan (2 + 2 Bulan / 120 Hari Tambahan)</td></tr>
-                        <tr style="font-style: italic; font-size: 9.5px; color: #666;"><td colspan="2">* Syarat Lanjutan: Bayar baki upah simpan asas (${formatCur(data.upahBasicBal)}) sebelum/pada ${dateBasicExpiryStr}.</td></tr>
+                        <tr class="group-header"><td colspan="2">Fasa 2: Tempoh Lanjutan (6 Bulan / 180 Hari Tambahan)</td></tr>
+                        <tr style="font-style: italic; font-size: 9.5px; color: #666;"><td colspan="2">* Syarat Lanjutan: Bayar baki upah simpan asas (${formatCur(data.upahBasicBal)}) sebelum/pada ${dateBasicExpiryStr} bagi melayakkan tempoh lanjutan 6 bulan lagi.</td></tr>
                         <tr><td>Tarikh Akhir Wajib Tebus:</td><td align="right" class="text-red"><b>${dateExtendedExpiryStr}</b></td></tr>
-                        <tr><td>Upah Simpan Lanjutan (120 Hari):</td><td align="right">${formatCur(upahExtended)}</td></tr>
+                        <tr><td>Upah Simpan Lanjutan (180 Hari):</td><td align="right">${formatCur(upahExtended)}</td></tr>
                         <tr><td>Jumlah Pembiayaan (Pokok):</td><td align="right">${formatCur(data.financingAmount)}</td></tr>
-                        <tr class="total-row-highlight" style="color: #e53e3e;"><td>Jumlah Tebus Bulan ke-10:</td><td align="right">${formatCur(totalRedeemExtended)}</td></tr>
+                        <tr class="total-row-highlight" style="color: #e53e3e;"><td>Jumlah Tebus Bulan ke-${totalMonths}:</td><td align="right">${formatCur(totalRedeemExtended)}</td></tr>
                         <tr style="font-style: italic; font-size: 9.5px; color: #555;">
                             <td colspan="2">
-                                <b>Simulasi ansuran bulanan (10 bulan): ${formatCur((data.financingAmount + data.upahBasicBal + upahExtended) / 10)} / sebulan.</b><br>
-                                *Nota Aliran & Pengiraan Ansuran: (Pokok RM ${data.financingAmount.toFixed(2)} + Baki Upah Asas RM ${data.upahBasicBal.toFixed(2)} + Upah Lanjutan RM ${upahExtended.toFixed(2)}) / 10 bulan. Bayaran ansuran bulanan hendaklah didahulukan untuk melunaskan Baki Upah Simpan Asas (RM ${data.upahBasicBal.toFixed(2)}) sebelum/pada ${dateBasicExpiryStr} bagi melayakkan lanjutan tempoh 4 bulan (Fasa 2) sebelum baki bayaran digunakan untuk Pokok Pembiayaan.
+                                <b>Simulasi ansuran bulanan (${totalMonths} bulan): ${formatCur((data.financingAmount + data.upahBasicBal + upahExtended) / totalMonths)} / sebulan.</b><br>
+                                *Nota Aliran & Pengiraan Ansuran: (Pokok RM ${data.financingAmount.toFixed(2)} + Baki Upah Asas RM ${data.upahBasicBal.toFixed(2)} + Upah Lanjutan RM ${upahExtended.toFixed(2)}) / ${totalMonths} bulan. Bayaran ansuran bulanan hendaklah didahulukan untuk melunaskan Baki Upah Simpan Asas (RM ${data.upahBasicBal.toFixed(2)}) sebelum/pada ${dateBasicExpiryStr} bagi melayakkan lanjutan tempoh 6 bulan (Fasa 2) sebelum baki bayaran digunakan untuk Pokok Pembiayaan.
                             </td>
                         </tr>
-                        <tr><td colspan="2" class="text-red" style="font-weight: bold; text-align: center; padding-top: 10px;">⚠️ PERINGATAN: WAJIB TEBUS. Tiada lanjutan/tukar surat selepas 10 bulan.</td></tr>
+                        <tr><td colspan="2" class="text-red" style="font-weight: bold; text-align: center; padding-top: 10px;">⚠️ PERINGATAN: WAJIB TEBUS atau TUKAR SURAT (Gadai Semula) selepas ${totalMonths} bulan.</td></tr>
                     `;
                 } else {
                     schedHtml = `
@@ -891,13 +903,16 @@
                                 *Nota Pengiraan Ansuran: (Pokok RM ${data.financingAmount.toFixed(2)} + Baki Upah Asas RM ${data.upahBasicBal.toFixed(2)}) / ${basicTenure} bulan.
                             </td>
                         </tr>
-                        <tr><td colspan="2" class="text-red" style="font-weight: bold; text-align: center; padding-top: 10px;">⚠️ PERINGATAN: WAJIB TEBUS. Produk ${data.selectedProduct.name} tiada tempoh lanjutan.</td></tr>
+                        <tr><td colspan="2" class="text-red" style="font-weight: bold; text-align: center; padding-top: 10px;">⚠️ PERINGATAN: WAJIB TEBUS atau TUKAR SURAT (Gadai Semula) jika cukup tempoh ${basicTenure} bulan. Produk ${data.selectedProduct.name} tiada tempoh lanjutan.</td></tr>
                     `;
                 }
                 schedBody.innerHTML = schedHtml;
 
                 // Generate clean PDF filename
                 let productNameCleaned = (data.selectedProduct && data.selectedProduct.name || 'Simulasi').replace(/[^a-zA-Z0-9]/g, '_');
+                if (data.isTukarSurat) {
+                    productNameCleaned += '_TukarSurat';
+                }
                 const today = new Date();
                 const dd = String(today.getDate()).padStart(2, '0');
                 const mm = String(today.getMonth() + 1).padStart(2, '0');

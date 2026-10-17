@@ -100,11 +100,7 @@
                             <line x1="12" y1="16" x2="12" y2="12"></line>
                             <line x1="12" y1="8" x2="12.01" y2="8"></line>
                         </svg></span>
-                    <span class="menu-label">
-                        Tentang
-                        <span id="update-dot"
-                            style="display: none; width: 8px; height: 8px; background-color: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger); margin-left: 8px;"></span>
-                    </span>
+                    <span class="menu-label">Tentang</span>
                 </a>
             </nav>
 
@@ -112,7 +108,7 @@
                 <div class="offline-badge">
                     <span class="badge-dot"></span> Mod Luar Talian
                 </div>
-                <div class="app-version">Versi 1.0</div>
+                <div class="app-version">Versi 2.0</div>
                 <div class="developer-name"
                     style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; opacity: 0.85;">by zuwan aufa
                 </div>
@@ -161,10 +157,7 @@
                         <div class="card card-accent">
                             <h3 class="card-title">📢 Makluman Semasa</h3>
                             <p class="text-sm">
-                                Aplikasi ini disesuaikan berdasarkan pindaan gadaian bermula 1 Julai 2026. Fungsi
-                                gadaian semula telah ditiadakan. Simulasi jadual ansuran bulanan kini merangkumi Fasa 1
-                                (Asas) dan Fasa 2 (Lanjutan). Pastikan mutu dan berat emas diisi dengan teliti sebelum
-                                membua transaksi.
+                                Aplikasi ini disesuaikan berdasarkan pindaan gadaian terkini. Fungsi Tukar Surat (Gadai Semula) kini disokong secara automatik dengan penggunaan pembiayaan lama dan caj perkhidmatan RM 10.00. Simulasi jadual ansuran bulanan merangkumi Fasa 1 (Asas) dan Fasa 2 (Lanjutan).
                             </p>
                         </div>
 
@@ -191,20 +184,6 @@
                                 <button class="btn btn-outline btn-sm" onclick="resetCalculator()">🔄 Set
                                     Semula</button>
                             </div>
-                        </section>
-
-                        <!-- Tebus Surat Gadaian Lama Section -->
-                        <section class="form-section">
-                            <h2 class="section-title">📄 Tebus Surat Gadaian Lama</h2>
-                            <p class="section-desc text-muted">
-                                Masukkan butiran surat gadaian lama yang ingin ditebus menggunakan hasil pembiayaan baru
-                                ini.
-                            </p>
-                            <div id="oldTicketsContainer">
-                                <!-- Populated by JS -->
-                            </div>
-                            <button class="btn btn-secondary btn-sm" onclick="addNewOldTicketRow()">➕ Tambah Surat
-                                Lama</button>
                         </section>
 
                         <!-- Additional Charges Section -->
@@ -333,6 +312,70 @@
                                         Lain</button>
                                 </div>
                             </div>
+                        </section>
+
+                        <!-- Tukar Surat (Gadai Semula) Section -->
+                        <section class="form-section">
+                            <div class="option-item" style="border-left: 3px solid var(--primary-color);">
+                                <div class="option-info">
+                                    <div class="option-label" style="font-size: 1rem; display: flex; align-items: center; gap: 8px;">
+                                        🔄 Tukar Surat (Gadai Semula)
+                                    </div>
+                                    <div class="option-desc">
+                                        Aktifkan fungsi ini untuk pertukaran surat / gadai semula. Sistem akan menggunakan pembiayaan lama secara automatik dan mengenakan caj tukar surat RM 10.00.
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="tukarSurat_cb" onchange="handleTukarSuratToggle()">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div id="tukarSuratFields" style="display: none; margin-top: 14px; background: rgba(255, 255, 255, 0.02); border: 1px dashed var(--border-color); border-radius: 8px; padding: 16px;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;">
+                                    <div>
+                                        <label for="tukarSuratTebus" style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main);">
+                                            Jumlah Tebus Surat Lama (RM) <span class="text-red">*</span>
+                                        </label>
+                                        <div class="input-currency" style="width: 100%;">
+                                            <span class="currency-symbol">RM</span>
+                                            <input type="number" id="tukarSuratTebus" placeholder="0.00" step="0.01" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="tukarSuratPembiayaan" style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main);">
+                                            Pembiayaan Surat Lama (RM) <span class="text-red">*</span>
+                                        </label>
+                                        <div class="input-currency" style="width: 100%;">
+                                            <span class="currency-symbol">RM</span>
+                                            <input type="number" id="tukarSuratPembiayaan" placeholder="0.00" step="0.01" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="tukarSuratRef" style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted);">
+                                        No. Rujukan Surat Lama <span style="font-size: 0.75rem; font-weight: normal;">(Pilihan)</span>
+                                    </label>
+                                    <input type="text" id="tukarSuratRef" placeholder="Cth: A1234-5678" style="width: 100%; padding: 8px 12px; font-size: 0.85rem;">
+                                </div>
+                                <div style="margin-top: 10px; font-size: 0.75rem; color: var(--primary-color);">
+                                    ℹ️ <em>Nota: Kedua-dua medan bertanda (<span class="text-red">*</span>) wajib diisi. Caj tukar surat RM 10.00 akan dikenakan secara automatik.</em>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Tebus Surat Gadaian Lama Section -->
+                        <section class="form-section">
+                            <h2 class="section-title">📄 Tebus Surat Gadaian Lama</h2>
+                            <p class="section-desc text-muted">
+                                Masukkan butiran surat gadaian lama yang ingin ditebus menggunakan hasil pembiayaan baru
+                                ini.
+                            </p>
+                            <div id="oldTicketsContainer">
+                                <!-- Populated by JS -->
+                            </div>
+                            <button class="btn btn-secondary btn-sm" onclick="addNewOldTicketRow()">➕ Tambah Surat
+                                Lama</button>
                         </section>
                     </div>
 
@@ -755,49 +798,49 @@
                                     <td><strong>Prestij</strong></td>
                                     <td>70%</td>
                                     <td>6 Bulan</td>
-                                    <td>4 Bulan (2+2)</td>
+                                    <td>6 Bulan (Wajib bayar upah asas 6 bln)</td>
                                     <td>RM 0.90 / RM100 marhun sebulan</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Didik</strong></td>
                                     <td>75%</td>
                                     <td>6 Bulan</td>
-                                    <td>4 Bulan (2+2)</td>
+                                    <td>6 Bulan (Wajib bayar upah asas 6 bln)</td>
                                     <td>RM 0.85 / RM100 marhun sebulan</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Bisnes</strong></td>
                                     <td>80%</td>
                                     <td>6 Bulan</td>
-                                    <td>4 Bulan (2+2)</td>
+                                    <td>Tiada Lanjutan (Wajib tebus/tukar surat)</td>
                                     <td>RM 1.00 / RM100 marhun sebulan</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Biznita</strong></td>
                                     <td>80%</td>
                                     <td>6 Bulan</td>
-                                    <td>4 Bulan (2+2)</td>
+                                    <td>Tiada Lanjutan (Wajib tebus/tukar surat)</td>
                                     <td>RM 0.95 / RM100 marhun sebulan</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Emas</strong></td>
                                     <td>80%</td>
                                     <td>6 Bulan</td>
-                                    <td>4 Bulan (2+2)</td>
+                                    <td>Tiada Lanjutan (Wajib tebus/tukar surat)</td>
                                     <td>RM 0.90 / RM100 marhun sebulan</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Care</strong></td>
                                     <td>80%</td>
                                     <td>6 Bulan</td>
-                                    <td>Tiada Lanjutan</td>
+                                    <td>Tiada Lanjutan (Wajib tebus/tukar surat)</td>
                                     <td>RM 0.75 / RM100 marhun sebulan</td>
                                 </tr>
                                 <tr>
                                     <td><strong>eKASIH (Kadar Khas)</strong></td>
                                     <td>70%</td>
                                     <td>10 Bulan</td>
-                                    <td>Tiada Lanjutan</td>
+                                    <td>Tiada Lanjutan (Wajib tebus/tukar surat)</td>
                                     <td>RM 0.10 / RM100 marhun sebulan</td>
                                 </tr>
                             </tbody>
@@ -860,9 +903,12 @@
                         <p class="text-muted mb-4">Nilai Marhun = Berat Barang (g) &times; Harga Emas Semasa (RM/g).
                             Diambil mengikut mutu emas yang sepadan.</p>
 
-                        <p class="mb-2"><strong>2. Jumlah Pembiayaan Baru</strong></p>
-                        <p class="text-muted mb-4">Pembiayaan = Jumlah Marhun &times; Margin Pembiayaan Produk. Nilai
-                            ini <strong>dibundarkan ke bawah (floor) kepada Ringgit terdekat (sen dibuang)</strong>.</p>
+                        <p class="mb-2"><strong>2. Jumlah Pembiayaan Baru (Pindaan 1 Oktober 2026)</strong></p>
+                        <p class="text-muted mb-4">
+                            Pembiayaan = Jumlah Marhun &times; Margin Pembiayaan Produk (%).<br>
+                            - Nilai sen dibuang (dibundarkan ke bawah kepada Ringgit terdekat).<br>
+                            - <strong>Khas Pindaan 1 Oktober 2026:</strong> Sekiranya nilai sen pembiayaan adalah <strong>RM 0.99</strong>, nilai pembiayaan akan <strong>digenapkan ke atas (round up)</strong> kepada Ringgit seterusnya (Cth: Nilai pembiayaan RM 556.99 digenapkan menjadi <strong>RM 557.00</strong>).
+                        </p>
 
                         <p class="mb-2"><strong>3. Upah Simpan Sehari & Awal 60 Hari</strong></p>
                         <p class="text-muted mb-4">
@@ -878,7 +924,7 @@
                             - <strong>I-Protect 2.0:</strong> RM 2.50 bagi setiap gandaan RM1,000 Nilai Marhun (dibundar
                             ke atas) + Caj Transaksi RM 1.50.
                         </p>
-                        <p class="mb-2"><strong>5. Transaksi Belian Balik Emas (Trade-in / Purchase)</strong></p>
+                        <p class="mb-2"><strong>5. Transaksi Belian Balik Emas (Pelanggan Jual Emas Kepada Ar Rahnu)</strong></p>
                         <p class="text-muted mb-4">
                             - Harga Belian Per Gram: Harga Emas Semasa &times; Kadar Belian Balik (%). Cth: Harga
                             916 segram RM300, Harga Belian = RM300 &times; 83% = RM249/g.<br>
@@ -886,7 +932,7 @@
                             - Nilai Belian (Payout): Berat (g) &times; Harga Belian Per Gram.
                         </p>
                         <p class="mb-2"><strong>6. Simpanan Selamat Al Saleem</strong></p>
-                        <p class="text-muted">
+                        <p class="text-muted mb-4">
                             - Skim simpanan selamat barang kemas sahaja tanpa pembiayaan tunai. Dikenakan upah simpan
                             kadar rata RM 0.60 bagi setiap RM100 Nilai Marhun sebulan.<br>
                             - Upah Simpan Harian: Nilai Marhun &times; (0.60 / 100) &times; 12 / 365 (dibundarkan
@@ -894,6 +940,66 @@
                             - Tempoh Simpanan Terkumpul: Upah simpan dikira berasaskan hari inklusif (bermula hari
                             pertama sehingga hari tebus). Jumlah upah terkumpul = Upah Simpan Harian &times; Bilangan
                             Hari Simpanan.
+                        </p>
+
+                        <p class="mb-2"><strong>7. Tempoh Gadaian & Syarat Lanjutan (Pindaan 1 Oktober 2026 - Versi 2.0)</strong></p>
+                        <p class="text-muted mb-4">
+                            - <strong>Produk Prestij & Didik:</strong> Tempoh asas adalah <strong>6 bulan</strong> dan tempoh lanjutan adalah <strong>6 bulan</strong> (Jumlah tempoh: <strong>12 bulan</strong>).<br>
+                            &nbsp;&nbsp;&bull; <em>Syarat Lanjutan:</em> Pelanggan wajib menjelaskan baki upah simpan tempoh asas 6 bulan terlebih dahulu sebelum/pada tarikh tamat tempoh asas untuk melayakkan tempoh lanjutan 6 bulan lagi.<br>
+                            &nbsp;&nbsp;&bull; <em>Penebusan Akhir:</em> Apabila genap 12 bulan, pelanggan <strong>wajib tebus atau tukar surat (gadai semula)</strong>.<br>
+                            - <strong>Produk Bisnes, Biznita, Emas & Care:</strong> Tempoh asas adalah <strong>6 bulan</strong> dan <strong>TIADA tempoh lanjutan</strong>. Pelanggan <strong>wajib tebus atau tukar surat (gadai semula)</strong> sebaik sahaja cukup tempoh 6 bulan.<br>
+                            - <strong>Produk eKASIH:</strong> Tempoh pembiayaan khas selama <strong>10 bulan</strong> dan <strong>TIADA tempoh lanjutan</strong>. Pelanggan <strong>wajib tebus atau tukar surat (gadai semula)</strong> sebaik sahaja cukup tempoh 10 bulan.
+                        </p>
+
+                        <p class="mb-2"><strong>8. Fungsi Tukar Surat (Gadai Semula)</strong></p>
+                        <p class="text-muted">
+                            - <strong>Tujuan:</strong> Digunakan untuk transaksi pertukaran surat / gadaian semula bagi surat gadaian sedia ada.<br>
+                            - <strong>Input Wajib Diisi:</strong> Apabila suis toggle "Tukar Surat (Gadai Semula)" diaktifkan, dua medan berikut adalah <strong>wajib diisi</strong> bagi membolehkan simulasi dijana:<br>
+                            &nbsp;&nbsp;&bull; <em>Jumlah Tebus Surat Lama (RM):</em> Jumlah keseluruhan bayaran tebus bagi surat gadaian lama.<br>
+                            &nbsp;&nbsp;&bull; <em>Pembiayaan Surat Lama (RM):</em> Amaun pembiayaan pokok asal daripada surat gadaian lama.<br>
+                            - <strong>Penggunaan Pembiayaan Lama:</strong> Sistem secara automatik <strong>menggunakan Pembiayaan Surat Lama</strong> (tidak boleh menggunakan had pembiayaan baru).<br>
+                            - <strong>Caj Tukar Surat:</strong> Dikenakan caj perkhidmatan pertukaran surat tetap bernilai <strong>RM 10.00</strong>.<br>
+                            - <strong>Formula Pengiraan Bersih:</strong><br>
+                            &nbsp;&nbsp;&bull; <em>Jumlah Bersih / Defisit = Pembiayaan Surat Lama + Belian Emas / Tunai Tambahan - Tebus Surat Lama (Tukar Surat) - Upah Simpan 60 Hari - Caj Tukar Surat (RM 10.00) - Segala Caj & Potongan Lain.</em><br>
+                            &nbsp;&nbsp;&bull; Sekiranya jumlah potongan melebihi pembiayaan lama, pelanggan perlu menambah wang tunai di kaunter (Defisit).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <h2 class="card-title">⚙️ Panduan Pengurusan Harga Emas (Menu "Urus Harga Emas")</h2>
+                    <div class="guide-logics text-sm">
+                        <p class="mb-2"><strong>1. Input Harga Emas Semasa (Hari Ini)</strong></p>
+                        <p class="text-muted mb-4">
+                            - Buka menu sidebar <strong>Urus Harga Emas</strong> &gt; Tab <strong>Harga Hari Ini</strong>.<br>
+                            - Masukkan nilai harga semasa per gram (RM/g) bagi setiap mutu emas (999, 950, 916, 875, 835, 750, 700 WG, 750 WG).<br>
+                            - Klik butang <strong>💾 Simpan Harga Hari Ini</strong>.<br>
+                            - Sistem akan menyimpan rekod harga emas tersebut ke dalam pangkalan data SQLite tempatan dengan tarikh hari ini.<br>
+                            - <em>Nota Penting:</em> Sekiranya tiada perubahan harga pada hari tertentu, tindakan kemas kini tidak diperlukan kerana sistem akan merujuk kepada rekod harga terkini secara automatik.
+                        </p>
+
+                        <p class="mb-2"><strong>2. Edit / Kemas Kini Rekod Sejarah Harga Emas</strong></p>
+                        <p class="text-muted mb-4">
+                            - Buka menu sidebar <strong>Urus Harga Emas</strong> &gt; Tab <strong>Log Sejarah Harga (CRUD)</strong>.<br>
+                            - Pada jadual <em>Log Sejarah Pangkalan Data</em>, cari tarikh dan mutu emas yang ingin diperbetulkan.<br>
+                            - Klik butang <strong>📝 Edit</strong> pada baris rekod tersebut. Maklumat tarikh, mutu, dan harga rekod akan dimuatkan ke dalam borang <em>"Kemas Kini Rekod Sejarah"</em> di bahagian atas.<br>
+                            - Ubah harga kepada nilai yang betul, kemudian klik butang <strong>💾 Simpan Rekod</strong>.<br>
+                            - Jika ingin membatalkan proses edit, klik butang <strong>Batal</strong> untuk mengosongkan borang.
+                        </p>
+
+                        <p class="mb-2"><strong>3. Padam Rekod Harga Emas</strong></p>
+                        <p class="text-muted mb-4">
+                            - Pada tab <strong>Log Sejarah Harga (CRUD)</strong>, cari rekod yang ingin dipadam daripada jadual.<br>
+                            - Klik butang <strong>🗑️ Padam</strong> pada baris rekod berkenaan.<br>
+                            - Dialog pengesahan keselamatan akan muncul bagi mengelakkan pemadaman tidak sengaja.<br>
+                            - Klik butang pengesahan untuk memadam rekod tersebut daripada pangkalan data SQLite. Sistem akan mengira dan menyelaraskan semula harga rujukan terkini secara automatik.
+                        </p>
+
+                        <p class="mb-2"><strong>4. Sandaran & Pengurusan Data (Eksport / Import CSV & Kosongkan Data)</strong></p>
+                        <p class="text-muted">
+                            - <strong>📥 Eksport CSV:</strong> Muat turun seluruh log sejarah harga emas ke fail CSV untuk sandaran luar (backup).<br>
+                            - <strong>📤 Import CSV:</strong> Muat naik fail data harga emas secara pukal ke dalam SQLite.<br>
+                            - <strong>🗑️ Kosongkan Data:</strong> Memadam keseluruhan pangkalan data harga emas (memerlukan pengesahan keselamatan).
                         </p>
                     </div>
                 </div>
@@ -1012,7 +1118,7 @@
                                 💬 Hantar Maklum Balas / Laporkan Bugs
                             </button>
                             <div style="margin-top: 8px; font-size: 0.8rem; color: var(--text-muted);">
-                                Versi Aplikasi: <b>1.0 (Stabil)</b> | Dibangunkan oleh <b>zuwan aufa</b> dengan bantuan
+                                Versi Aplikasi: <b>2.0 (Pindaan 1 Okt 2026)</b> | Dibangunkan oleh <b>zuwan aufa</b> dengan bantuan
                                 AI sepenuhnya.
                             </div>
                         </div>

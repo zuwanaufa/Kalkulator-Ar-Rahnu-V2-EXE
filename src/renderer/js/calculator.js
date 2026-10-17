@@ -102,6 +102,21 @@ export function saveActiveTabState() {
 
     // 9. Cash paid value
     tab.cashPaidVal = document.getElementById('cashPaidVal')?.value || '';
+
+    // 10. Tukar Surat (Gadai Semula)
+    tab.tukarSurat = document.getElementById('tukarSurat_cb')?.checked || false;
+    tab.tukarSuratRef = document.getElementById('tukarSuratRef')?.value || '';
+    tab.tukarSuratTebus = document.getElementById('tukarSuratTebus')?.value || '';
+    tab.tukarSuratPembiayaan = document.getElementById('tukarSuratPembiayaan')?.value || '';
+}
+
+export function handleTukarSuratToggle() {
+    const cb = document.getElementById('tukarSurat_cb');
+    const fields = document.getElementById('tukarSuratFields');
+    if (cb && fields) {
+        fields.style.display = cb.checked ? 'block' : 'none';
+    }
+    calculateAll();
 }
 
 export function loadTabState(tabId) {
@@ -252,6 +267,23 @@ export function loadTabState(tabId) {
             othersContainer.appendChild(div);
         });
     }
+
+    // 8. Tukar Surat (Gadai Semula)
+    const tukarSuratCb = document.getElementById('tukarSurat_cb');
+    const tukarSuratFields = document.getElementById('tukarSuratFields');
+    const tukarSuratRef = document.getElementById('tukarSuratRef');
+    const tukarSuratTebus = document.getElementById('tukarSuratTebus');
+    const tukarSuratPembiayaan = document.getElementById('tukarSuratPembiayaan');
+
+    if (tukarSuratCb) {
+        tukarSuratCb.checked = tab.tukarSurat || false;
+    }
+    if (tukarSuratFields) {
+        tukarSuratFields.style.display = tab.tukarSurat ? 'block' : 'none';
+    }
+    if (tukarSuratRef) tukarSuratRef.value = tab.tukarSuratRef || '';
+    if (tukarSuratTebus) tukarSuratTebus.value = tab.tukarSuratTebus || '';
+    if (tukarSuratPembiayaan) tukarSuratPembiayaan.value = tab.tukarSuratPembiayaan || '';
 
     // Trigger calculation
     calculateAll(false);
@@ -410,7 +442,7 @@ export function renderProducts() {
         div.onclick = () => window.selectProduct(p.id);
 
         const rateText = p.isDaily ? `RM ${p.rate.toFixed(2)} / RM100 sehari` : `RM ${p.rate.toFixed(2)} / RM100 sebulan`;
-        const tenureText = p.canExtend ? `${p.tenure} Bulan (2+2)` : `${p.tenure} Bulan`;
+        const tenureText = p.canExtend ? `${p.tenure} + 6 Bulan (12 Bulan)` : `${p.tenure} Bulan`;
 
         div.innerHTML = `
             <div class="product-title">${p.name}</div>
@@ -556,8 +588,10 @@ export function calculateAll(freshCustomFinancing = true) {
     if (tabs && tabs.length > 0 && activeTabId) {
         const activeTabIdx = tabs.findIndex(t => t.id === activeTabId);
         if (activeTabIdx !== -1) {
+            const isTS = document.getElementById('tukarSurat_cb')?.checked || false;
+            const suffix = isTS ? ' [TS]' : '';
             if (selectedProduct) {
-                tabs[activeTabIdx].name = `${selectedProduct.name} (Tab ${activeTabIdx + 1})`;
+                tabs[activeTabIdx].name = `${selectedProduct.name}${suffix} (Tab ${activeTabIdx + 1})`;
             } else {
                 tabs[activeTabIdx].name = `Kiraan ${activeTabIdx + 1}`;
             }
@@ -577,6 +611,10 @@ export function calculateAll(freshCustomFinancing = true) {
 
     if (!selectedProduct) {
         calcPrompt.style.display = 'flex';
+        calcPrompt.innerHTML = `
+            <div class="prompt-icon">ℹ️</div>
+            <div>Sila pilih produk dan masukkan berat barang gadaian untuk menjana rumusan pengiraan.</div>
+        `;
         calcResults.style.display = 'none';
         return;
     }
@@ -610,6 +648,28 @@ export function calculateAll(freshCustomFinancing = true) {
 
     if (hasInvalid || totalMarhun === 0) {
         calcPrompt.style.display = 'flex';
+        calcPrompt.innerHTML = `
+            <div class="prompt-icon">ℹ️</div>
+            <div>Sila pilih produk dan masukkan berat barang gadaian untuk menjana rumusan pengiraan.</div>
+        `;
+        calcResults.style.display = 'none';
+        return;
+    }
+
+    // Tukar Surat (Gadai Semula) Check & Validation
+    const isTukarSurat = document.getElementById('tukarSurat_cb')?.checked || false;
+    const tukarSuratRef = document.getElementById('tukarSuratRef')?.value.trim() || '';
+    const tukarSuratTebusVal = parseFloat(document.getElementById('tukarSuratTebus')?.value) || 0;
+    const tukarSuratPembiayaanVal = parseFloat(document.getElementById('tukarSuratPembiayaan')?.value) || 0;
+
+    if (isTukarSurat && (tukarSuratTebusVal <= 0 || tukarSuratPembiayaanVal <= 0)) {
+        calcPrompt.style.display = 'flex';
+        calcPrompt.innerHTML = `
+            <div class="prompt-icon">⚠️</div>
+            <div>
+                <strong>Mod Tukar Surat Aktif:</strong> Sila lengkapkan <strong>Jumlah Tebus Surat Lama</strong> dan <strong>Pembiayaan Surat Lama</strong> (kedua-dua medan ini wajib diisi).
+            </div>
+        `;
         calcResults.style.display = 'none';
         return;
     }
@@ -617,23 +677,39 @@ export function calculateAll(freshCustomFinancing = true) {
     calcPrompt.style.display = 'none';
     calcResults.style.display = 'block';
 
-    // 2. Financing limit (floored to Ringgit)
-    const financingMax = Math.floor(totalMarhun * (selectedProduct.margin / 100));
+    // 2. Jumlah Pembiayaan Maksimum (Pindaan 1 Oktober 2026 - Versi 2.0)
+    // Formula asas: Jumlah Marhun * Margin%.
+    // Mengikut piawaian, nilai sen dibuang (Math.floor).
+    // Pindaan 1 Oktober 2026: Jika nilai sen adalah RM 0.99 (>= 99 sen selepas dibundar 2 tempat perpuluhan),
+    // nilai pembiayaan digenapkan ke atas (Math.ceil) kepada Ringgit seterusnya (Cth: RM556.99 -> RM557.00).
+    const financingRaw = totalMarhun * (selectedProduct.margin / 100);
+    const roundedFinancingRaw = Math.round(financingRaw * 100) / 100;
+    const floorFinancing = Math.floor(roundedFinancingRaw);
+    const cents = Math.round((roundedFinancingRaw - floorFinancing) * 100);
+    const financingMax = (cents >= 99) ? Math.ceil(roundedFinancingRaw) : floorFinancing;
 
-    // Custom financing request
-    const customFinancingInput = document.getElementById('customFinancingVal');
+    // Financing Amount Logic
     let financingAmount = financingMax;
+    let cajTukarSurat = 0;
 
-    if (customFinancingInput && !freshCustomFinancing) {
-        const rawVal = customFinancingInput.value.replace(/[^0-9]/g, '');
-        const customVal = parseFloat(rawVal);
-        if (!isNaN(customVal)) {
-            if (customVal > financingMax) {
-                financingAmount = financingMax;
-            } else if (customVal < 0) {
-                financingAmount = 0;
-            } else {
-                financingAmount = Math.floor(customVal);
+    if (isTukarSurat) {
+        // Jika tukar surat aktif, sistem secara automatik menggunakan pembiayaan lama (tidak boleh menggunakan pembiayaan baru) dan dikenakan caj tukar surat RM10
+        financingAmount = tukarSuratPembiayaanVal;
+        cajTukarSurat = 10.00;
+    } else {
+        // Custom financing request
+        const customFinancingInput = document.getElementById('customFinancingVal');
+        if (customFinancingInput && !freshCustomFinancing) {
+            const rawVal = customFinancingInput.value.replace(/[^0-9]/g, '');
+            const customVal = parseFloat(rawVal);
+            if (!isNaN(customVal)) {
+                if (customVal > financingMax) {
+                    financingAmount = financingMax;
+                } else if (customVal < 0) {
+                    financingAmount = 0;
+                } else {
+                    financingAmount = Math.floor(customVal);
+                }
             }
         }
     }
@@ -726,10 +802,10 @@ export function calculateAll(freshCustomFinancing = true) {
         }
     });
 
-    const totalDeductionsCommon = upah60Days + iProtect + iProtectTransFee + flexiPa + newMember + sag + suratWakilTebus + cuci + uji + othersTotal;
+    const totalDeductionsCommon = upah60Days + cajTukarSurat + iProtect + iProtectTransFee + flexiPa + newMember + sag + suratWakilTebus + cuci + uji + othersTotal;
     
     // Net result
-    const netReceivedStandard = financingAmount + belianEmas + otherCashTotal - totalDeductionsCommon - totalRedeemOld;
+    const netReceivedStandard = financingAmount + belianEmas + otherCashTotal - totalDeductionsCommon - (isTukarSurat ? tukarSuratTebusVal : 0) - totalRedeemOld;
 
     // --- Prepare Schedule Markup ---
     const pawnDate = new Date();
@@ -742,14 +818,20 @@ export function calculateAll(freshCustomFinancing = true) {
     const totalRedeemBasic = financingAmount + upahBasicBal;
 
     let scheduleHtml = '';
+    let upahExtended = 0;
+    let totalRedeemExtended = 0;
+    let dateExtendedExpiry = null;
+
     if (selectedProduct.canExtend) {
-        const dateExtendedExpiry = addMonths(pawnDate, 10);
-        const upahExtended = dailyRate * 120;
-        const totalRedeemExtended = financingAmount + upahExtended;
+        const extendedMonths = selectedProduct.extendTenure || 6;
+        const totalMonths = basicMonths + extendedMonths; // 12 Bulan
+        dateExtendedExpiry = addMonths(pawnDate, totalMonths);
+        upahExtended = dailyRate * (extendedMonths * 30); // 180 Hari
+        totalRedeemExtended = financingAmount + upahExtended;
 
         scheduleHtml = `
             <div class="schedule-container">
-                <div class="schedule-header">📅 Jadual Bayaran Balik (Lanjutan)</div>
+                <div class="schedule-header">📅 Jadual Bayaran Balik (Lanjutan - 12 Bulan)</div>
                 <table class="sched-table">
                     <tbody>
                         <tr class="group-header"><td colspan="2">Fasa 1: Tempoh Asas (6 Bulan / 180 Hari)</td></tr>
@@ -762,28 +844,28 @@ export function calculateAll(freshCustomFinancing = true) {
                         <tr class="total-row"><td>Anggaran Tebus Bulan ke-6:</td><td align="right">${formatCurrency(totalRedeemBasic)}</td></tr>
                         <tr class="text-muted">
                             <td colspan="2" style="font-size: 0.8rem; line-height: 1.4;">
-                                <b>Ansuran Bulanan: ${formatCurrency(totalRedeemBasic / 6)} / bulan</b><br>
+                                <b>Ansuran Bulanan: ${formatCurrency(totalRedeemBasic / basicMonths)} / bulan</b><br>
                                 <span style="font-size: 0.75rem; display: block; margin-top: 4px; color: var(--text-muted);">
-                                    *Nota Pengiraan Ansuran: (Pokok RM ${financingAmount.toFixed(2)} + Baki Upah Asas RM ${upahBasicBal.toFixed(2)}) / 6 bulan.
+                                    *Nota Pengiraan Ansuran: (Pokok RM ${financingAmount.toFixed(2)} + Baki Upah Asas RM ${upahBasicBal.toFixed(2)}) / ${basicMonths} bulan.
                                 </span>
                             </td>
                         </tr>
                         
-                        <tr class="group-header"><td colspan="2">Fasa 2: Tempoh Lanjutan (2 + 2 Bulan)</td></tr>
-                        <tr class="text-muted"><td colspan="2"><i>* Syarat Fasa 2: Jelaskan baki upah asas ${formatCurrency(upahBasicBal)} sebelum ${formatDate(dateBasicExpiry)}.</i></td></tr>
+                        <tr class="group-header"><td colspan="2">Fasa 2: Tempoh Lanjutan (6 Bulan / 180 Hari Tambahan)</td></tr>
+                        <tr class="text-muted"><td colspan="2"><i>* Syarat Fasa 2 (Lanjutan): Pelanggan wajib bayar baki upah simpan asas (${formatCurrency(upahBasicBal)}) sebelum/pada ${formatDate(dateBasicExpiry)} bagi melayakkan tempoh lanjutan 6 bulan lagi.</i></td></tr>
                         <tr><td>Tamat Tempoh Lanjutan:</td><td align="right" class="text-red"><b>${formatDate(dateExtendedExpiry)}</b></td></tr>
-                        <tr><td>Upah Lanjutan (120 Hari):</td><td align="right">${formatCurrency(upahExtended)}</td></tr>
+                        <tr><td>Upah Lanjutan (180 Hari):</td><td align="right">${formatCurrency(upahExtended)}</td></tr>
                         <tr><td>Pokok Pembiayaan:</td><td align="right">${formatCurrency(financingAmount)}</td></tr>
-                        <tr class="total-row" style="color:var(--danger)"><td>Jumlah Tebus Bulan ke-10:</td><td align="right">${formatCurrency(totalRedeemExtended)}</td></tr>
+                        <tr class="total-row" style="color:var(--danger)"><td>Jumlah Tebus Bulan ke-${totalMonths}:</td><td align="right">${formatCurrency(totalRedeemExtended)}</td></tr>
                         <tr class="text-muted">
                             <td colspan="2" style="font-size: 0.8rem; line-height: 1.4;">
-                                <b>Simulasi Ansuran (10 Bulan): ${formatCurrency((financingAmount + upahBasicBal + upahExtended) / 10)} / bulan</b><br>
+                                <b>Simulasi Ansuran (${totalMonths} Bulan): ${formatCurrency((financingAmount + upahBasicBal + upahExtended) / totalMonths)} / bulan</b><br>
                                 <span style="font-size: 0.75rem; display: block; margin-top: 4px; color: var(--text-muted); text-align: justify;">
-                                    *Nota Aliran & Pengiraan Ansuran: (Pokok RM ${financingAmount.toFixed(2)} + Baki Upah Asas RM ${upahBasicBal.toFixed(2)} + Upah Lanjutan RM ${upahExtended.toFixed(2)}) / 10 bulan. Bayaran ansuran bulanan hendaklah didahulukan untuk melunaskan Baki Upah Simpan Asas (RM ${upahBasicBal.toFixed(2)}) sebelum/pada ${formatDate(dateBasicExpiry)} bagi melayakkan lanjutan tempoh 4 bulan (Fasa 2) sebelum baki bayaran digunakan untuk Pokok Pembiayaan.
+                                    *Nota Aliran & Pengiraan Ansuran: (Pokok RM ${financingAmount.toFixed(2)} + Baki Upah Asas RM ${upahBasicBal.toFixed(2)} + Upah Lanjutan RM ${upahExtended.toFixed(2)}) / ${totalMonths} bulan. Bayaran ansuran bulanan hendaklah didahulukan untuk melunaskan Baki Upah Simpan Asas (RM ${upahBasicBal.toFixed(2)}) sebelum/pada ${formatDate(dateBasicExpiry)} bagi melayakkan lanjutan tempoh 6 bulan (Fasa 2) sebelum baki bayaran digunakan untuk Pokok Pembiayaan.
                                 </span>
                             </td>
                         </tr>
-                        <tr><td colspan="2" class="text-red text-xs font-semibold">⚠️ Peringatan: Wajib tebus sepenuhnya selepas 10 bulan. Tiada gadaian semula.</td></tr>
+                        <tr><td colspan="2" class="text-red text-xs font-semibold">⚠️ Peringatan: Wajib tebus atau tukar surat (gadai semula) sepenuhnya selepas ${totalMonths} bulan.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -810,7 +892,7 @@ export function calculateAll(freshCustomFinancing = true) {
                                 </span>
                             </td>
                         </tr>
-                        <tr><td colspan="2" class="text-red text-xs font-semibold">⚠️ Peringatan: Wajib tebus sepenuhnya selepas ${basicMonths} bulan. Produk ${selectedProduct.name} tiada tempoh lanjutan.</td></tr>
+                        <tr><td colspan="2" class="text-red text-xs font-semibold">⚠️ Peringatan: Wajib tebus atau tukar surat (gadai semula) jika cukup tempoh ${basicMonths} bulan. Produk ${selectedProduct.name} tiada tempoh lanjutan.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -864,29 +946,52 @@ export function calculateAll(freshCustomFinancing = true) {
     let resultsHtml = `
         <div class="result-row highlight">
             <span>Produk Terpilih:</span>
-            <span>${selectedProduct.name}</span>
+            <span>${selectedProduct.name} ${isTukarSurat ? '<span style="font-size:0.7rem; padding: 2px 8px; border-radius: 4px; background: var(--primary-color); color: #12161f; font-weight: 700; margin-left: 6px;">TUKAR SURAT</span>' : ''}</span>
         </div>
         <div class="result-row">
             <span>Nilai Marhun Keseluruhan:</span>
             <span>${formatCurrency(totalMarhun)}</span>
         </div>
         <div class="result-row">
-            <span>Pembiayaan Maks (${selectedProduct.margin}%):</span>
+            <span>Pembiayaan Maks Baru (${selectedProduct.margin}%):</span>
             <span><b>${formatCurrency(financingMax)}</b></span>
         </div>
-        <div class="result-row" style="align-items: center;">
-            <span class="font-semibold" style="color: var(--primary-color)">Pembiayaan Dipohon:</span>
-            <div class="input-currency" style="width: 160px; height: 32px;">
-                <span class="currency-symbol" style="padding: 4px 0 4px 10px;">RM</span>
-                <input type="text" id="customFinancingVal" value="${financingAmount}" style="padding: 4px 10px 4px 2px; font-weight: bold; text-align: right; color: var(--primary-color);" oninput="sanitizeFinancingInput(this)">
+        ${isTukarSurat ? `
+            <div class="result-row" style="align-items: center; background: rgba(212, 175, 55, 0.08); padding: 8px 10px; border-radius: 6px; margin: 4px 0;">
+                <div style="display: flex; flex-direction: column;">
+                    <span class="font-semibold" style="color: var(--primary-color)">Pembiayaan Surat Lama (Digunakan):</span>
+                    <span class="text-muted" style="font-size: 0.7rem;">*Tukar Surat: Menggunakan pembiayaan lama</span>
+                </div>
+                <div class="input-currency" style="width: 160px; height: 32px; opacity: 0.95;">
+                    <span class="currency-symbol" style="padding: 4px 0 4px 10px;">RM</span>
+                    <input type="text" id="customFinancingVal" value="${financingAmount}" disabled readonly style="padding: 4px 10px 4px 2px; font-weight: bold; text-align: right; color: var(--primary-color); cursor: not-allowed; background: transparent;">
+                </div>
             </div>
-        </div>
+        ` : `
+            <div class="result-row" style="align-items: center;">
+                <span class="font-semibold" style="color: var(--primary-color)">Pembiayaan Dipohon:</span>
+                <div class="input-currency" style="width: 160px; height: 32px;">
+                    <span class="currency-symbol" style="padding: 4px 0 4px 10px;">RM</span>
+                    <input type="text" id="customFinancingVal" value="${financingAmount}" style="padding: 4px 10px 4px 2px; font-weight: bold; text-align: right; color: var(--primary-color);" oninput="sanitizeFinancingInput(this)">
+                </div>
+            </div>
+        `}
+        ${isTukarSurat ? `
+            <div class="result-row text-red">
+                <span>Caj Tukar Surat:</span>
+                <span>-${formatCurrency(cajTukarSurat)}</span>
+            </div>
+            <div class="result-row text-red">
+                <span>Tebus Surat Lama (Tukar Surat${tukarSuratRef ? ' - ' + tukarSuratRef : ''}):</span>
+                <span>-${formatCurrency(tukarSuratTebusVal)}</span>
+            </div>
+        ` : ''}
         <div class="result-row">
             <span>Upah Simpan (Harian):</span>
             <span>${formatCurrency(dailyRate)}</span>
         </div>
         <div class="result-row text-red">
-            <span>Upah Simpan (60 Hari Awal):</span>
+            <span>Upah Simpan (Awal 60 Hari):</span>
             <span>-${formatCurrency(upah60Days)}</span>
         </div>
         
@@ -905,15 +1010,15 @@ export function calculateAll(freshCustomFinancing = true) {
         
         <div class="result-row-total">
             ${netReceivedStandard < 0 
-                ? `<span class="text-red">Pelanggan Perlu Tambah Tunai:</span><span class="text-red">-${formatCurrency(deficit)}</span>`
-                : `<span class="text-green">Jumlah Bersih Diterima:</span><span class="text-green">${formatCurrency(netReceivedStandard)}</span>`
+                ? `<span class="text-red">Pelanggan Perlu Tambah Tunai (Defisit):</span><span class="text-red">-${formatCurrency(deficit)}</span>`
+                : `<span class="text-green">Jumlah Bersih Diterima Pelanggan:</span><span class="text-green">${formatCurrency(netReceivedStandard)}</span>`
             }
         </div>
 
         ${netReceivedStandard < 0 ? `
             <div class="deficit-card">
                 <div class="result-row text-red" style="font-weight: bold; border-bottom: none; margin-bottom: 8px;">
-                    <span>Pelanggan Perlu Bayar:</span>
+                    <span>Pelanggan Perlu Bayar (Defisit):</span>
                     <span>${formatCurrency(deficit)}</span>
                 </div>
                 <div class="result-row" style="align-items: center; border-bottom: none; margin-bottom: 8px;">
@@ -942,6 +1047,11 @@ export function calculateAll(freshCustomFinancing = true) {
         totalMarhun,
         financingAmount,
         financingMax,
+        isTukarSurat,
+        cajTukarSurat,
+        tukarSuratRef,
+        tukarSuratTebus: tukarSuratTebusVal,
+        tukarSuratPembiayaan: tukarSuratPembiayaanVal,
         dailyRate,
         upah60Days,
         belianEmas,
@@ -966,7 +1076,10 @@ export function calculateAll(freshCustomFinancing = true) {
         dateBasicExpiry,
         upahBasicTotal,
         upahBasicBal,
-        totalRedeemBasic
+        totalRedeemBasic,
+        upahExtended,
+        totalRedeemExtended,
+        dateExtendedExpiry
     };
 
     standardResultContent.innerHTML = itemsTableHtml + resultsHtml;
@@ -1061,7 +1174,10 @@ export function setupCalculationListeners() {
     const inputs = [
         'belianEmasVal',
         'cuciEmasVal',
-        'ujiEmasVal'
+        'ujiEmasVal',
+        'tukarSuratRef',
+        'tukarSuratTebus',
+        'tukarSuratPembiayaan'
     ];
     
     inputs.forEach(id => {
@@ -1084,4 +1200,9 @@ export function setupCalculationListeners() {
             el.addEventListener('change', () => calculateAll());
         }
     });
+
+    const tukarSuratCb = document.getElementById('tukarSurat_cb');
+    if (tukarSuratCb) {
+        tukarSuratCb.addEventListener('change', () => handleTukarSuratToggle());
+    }
 }

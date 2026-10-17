@@ -1,6 +1,6 @@
 {
   "name": "ar-rahnu-v2-exe",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Kalkulator Ar Rahnu V2 - Desktop Application",
   "main": "src/main/main.js",
   "scripts": {
@@ -28,6 +28,7 @@
   "build": {
     "appId": "com.yapeim.arrahnuv2",
     "productName": "KalkulatorArRahnuV2",
+    "npmRebuild": false,
     "win": {
       "target": "portable",
       "requestedExecutionLevel": "asInvoker"
